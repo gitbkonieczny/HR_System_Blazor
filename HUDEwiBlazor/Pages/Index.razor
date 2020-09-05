@@ -1,0 +1,42 @@
+﻿@page "/"
+@page "/{loginsitetype}"
+@page "/{loginsitetype}/{linkcode}"
+@layout LoginLayout
+    
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                @switch (loginsitetype)
+                {
+                    case null:
+                        <LoginInput />
+                        break;
+                    case "LoginPasswordReset":
+                        <LoginPasswordReset />
+                        break;
+                    case "LoginPasswordSendLinkConfirmation":
+                        <LoginPasswordSendLinkConfirmation />
+                        break;
+                    case "LoginPasswordChange":
+                        <LoginPasswordChange Site="LoginPasswordChange" LinkCode="@linkcode" />
+                        break;
+                    case "LoginPasswordChangeConfirmation":
+                        <LoginPasswordChangeConfirmation />
+                        break;
+                    default:
+                        break;
+                }
+
+                <div class="login100-more" style="background-image: url('images/hud_slide.jpg');">
+                </div>
+            </div>
+        </div>
+    </div>
+    <Document Title="Logowanie" />
+
+    @code{
+        [Parameter]
+        public string loginsitetype { get; set; } = "LoginInput";
+        [Parameter]
+        public string linkcode { get; set; }
+    }

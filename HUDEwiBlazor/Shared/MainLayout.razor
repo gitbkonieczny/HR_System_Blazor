@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@inject NavigationManager NavigationManager
+@if (isConnected)
+{
+    @Body
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+@code {
+    private bool isConnected = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isConnected = true;
+            await LoadStateAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadStateAsync()
+    {
+        var guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
+        if (guid==null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+}
