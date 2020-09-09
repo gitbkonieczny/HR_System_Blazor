@@ -1,6 +1,12 @@
 ﻿@inherits LayoutComponentBase
 @inject ProtectedSessionStorage ProtectedSessionStorage
+@inject ProtectedLocalStorage ProtectedLocalStorage
 @inject NavigationManager NavigationManager
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@using Microsoft.Extensions.Options;
+@using Microsoft.AspNetCore.Builder;
+@using Microsoft.AspNetCore.Localization
+
 @if (isConnected)
 {
     @Body
@@ -13,7 +19,7 @@ else
 
 @code {
     private bool isConnected = false;
-
+    public string guid { get; set; }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -26,11 +32,12 @@ else
 
     private async Task LoadStateAsync()
     {
-        var guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
-        if (guid==null)
+        guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
+        if (guid == null)
         {
             NavigationManager.NavigateTo("/");
         }
+
     }
 
 }

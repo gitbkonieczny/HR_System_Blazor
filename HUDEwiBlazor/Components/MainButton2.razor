@@ -1,0 +1,26 @@
+﻿<div class="container-login100-form-btn">
+    <button class="@type login100-form-btn" @onclick="NavigateTo">
+        @Title
+    </button>
+</div>
+
+@code{
+   
+    [Parameter]
+    public string type { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Url { get; set; }
+
+
+    [Inject]
+    protected NavigationManager navigationManager { get; set; }
+
+    protected void NavigateTo()
+    {
+        navigationManager.NavigateTo(Url);
+    }
+}

@@ -2,19 +2,28 @@
 @page "/{loginsitetype}"
 @page "/{loginsitetype}/{linkcode}"
 @layout LoginLayout
-    
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                @switch (loginsitetype)
-                {
-                    case null:
-                        <LoginInput />
-                        break;
-                    case "LoginPasswordReset":
+@inject ISyncfusionStringLocalizer  Localizer
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject NavigationManager NavigationManager
+@using Microsoft.Extensions.Options;
+@using Microsoft.AspNetCore.Builder;
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            @switch (loginsitetype)
+            {
+                case null:
+
+                    break;
+                case "IndexSite":
+                    <LoginInput Site="IndexSite" />
+                    break;
+                case "LoginPasswordReset":
                         <LoginPasswordReset />
                         break;
-                    case "LoginPasswordSendLinkConfirmation":
+                case "LoginPasswordSendLinkConfirmation":
                         <LoginPasswordSendLinkConfirmation />
                         break;
                     case "LoginPasswordChange":
@@ -27,16 +36,31 @@
                         break;
                 }
 
-                <div class="login100-more" style="background-image: url('images/hud_slide.jpg');">
-                </div>
+            <div class="login100-more" style="background-image: url('images/hud_slide.jpg');">
             </div>
         </div>
     </div>
-    <Document Title="Logowanie" />
+</div>
 
-    @code{
-        [Parameter]
-        public string loginsitetype { get; set; } = "LoginInput";
-        [Parameter]
-        public string linkcode { get; set; }
+@code{
+    [Parameter]
+    public string loginsitetype { get; set; } = "LoginInput";
+    [Parameter]
+    public string linkcode { get; set; }
+
+   
+    protected override async Task OnParametersSetAsync()
+    {
+        if (loginsitetype == null)
+        {
+            var Locale = await ProtectedLocalStorage.GetAsync<string>("Culture");
+            if (Locale != null && Locale != "Select Culture")
+            {
+                LocOptions.Value.SetDefaultCulture(Locale);
+            }
+            NavigationManager.NavigateTo("IndexSite", forceLoad:true);
+        }
+
+
     }
+}

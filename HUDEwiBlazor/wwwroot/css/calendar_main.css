@@ -1,0 +1,66 @@
+﻿
+.control-section {
+    height: 100%;
+}
+
+.e-calendar {
+    max-width: none !important;
+}
+
+span.highlight {
+    font-family: Poppins-Regular, sans-serif;
+    font-size: 10px;
+    display: block;
+    margin-left: -5px;
+    width: auto;
+    height: 20px;
+}
+
+span.desc,
+span.desc:before {
+    color: rgb(0, 0, 255) !important;
+}
+
+.e-other-month span.desc:before {
+    content: "";
+}
+
+span.desc:before {
+    content: "";
+    vertical-align: middle;
+    margin-right: 3px;
+    font-size: 4px;
+    position: relative;
+    top: 0px;
+    font-weight: normal;
+    display:block;
+}
+
+.e-bigger.e-calendar span.desc:before,
+.e-bigger .e-calendar span.desc:before {
+}
+
+.e-calendar .e-content td.public span.e-day, .e-calendar .e-content td.public:hover span.e-day, .e-calendar .e-content td.public:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.public span.e-day, .e-bigger.e-small .e-calendar .e-content td.public:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.public:focus span.e-day {
+    color: red !important;
+}
+
+
+.e-calendar .e-content td.nopublic span.e-day, .e-calendar .e-content td.nopublic:hover span.e-day, .e-calendar .e-content td.nopublic:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic:focus span.e-day {
+    color: blue !important;
+}
+
+
+.e-calendar .e-content td.e-highlightsunday span.e-day, .e-calendar .e-content td.e-highlightsunday:hover span.e-day, .e-calendar .e-content td.e-highlightsunday:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday:focus span.e-day {
+    color: red !important;
+}
+
+.e-calendar .e-content td.e-weekend:not(.e-other-month), .e-calendar .e-content td.e-weekend:hover:not(.e-other-month), .e-calendar .e-content td.e-weekend:focus:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:hover:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:focus:not(.e-other-month) {
+    background-color: lightgrey;
+} .e-calendar .e-content td, .e-calendar .e-content td:hover, .e-calendar .e-content td:focus, .e-bigger.e-small .e-calendar .e-content td, .e-bigger.e-small .e-calendar .e-content td:hover, .e-bigger.e-small .e-calendar .e-content td:focus {
+        vertical-align: top;
+        height:50px;
+    } .e-calendar .e-content td.e-disabled, .e-bigger.e-small .e-calendar .e-content td.e-disabled {
+    opacity: 0.8 !important;
+} .e-calendar .e-content td.e-cell, .e-bigger.e-small .e-calendar .e-content td.e-cell {
+            height: 50px !important;
+        }

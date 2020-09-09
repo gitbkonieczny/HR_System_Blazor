@@ -1,0 +1,54 @@
+﻿
+
+<a class="t-link @type-c" href="#" @onmouseover="over_out_button" @onmouseout="over_out_button" @onclick="NavigateTo">
+    <img class="@type" src="@src_t" />
+    <span>@Title</span>
+</a>
+
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        src_t = src;
+    }
+
+    [Parameter]
+    public string type { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string src { get; set; }
+
+    [Parameter]
+    public string hover_src { get; set; }
+
+    [Parameter]
+    public string Url { get; set; }
+
+    private string src_t;
+
+    [Inject]
+    protected NavigationManager navigationManager { get; set; }
+
+    protected void over_out_button(MouseEventArgs e)
+    {
+        if (e.Type == "mouseover")
+        {
+            src_t= hover_src;
+            StateHasChanged();
+        }
+        if (e.Type == "mouseout")
+        {
+            src_t = src;
+            StateHasChanged();
+        }
+
+    }
+
+    protected void NavigateTo()
+    {
+        navigationManager.NavigateTo(Url);
+    }
+}

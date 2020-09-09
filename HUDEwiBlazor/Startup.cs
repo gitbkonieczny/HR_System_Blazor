@@ -13,6 +13,11 @@ using HUDEwiBlazor.Data;
 using Microsoft.EntityFrameworkCore;
 using HUDEwiBlazor.Interfaces;
 using HUDEwiBlazor.Classes;
+using Syncfusion.Blazor;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.ProtectedBrowserStorage;
 
 namespace HUDEwiBlazor
 {
@@ -32,6 +37,28 @@ namespace HUDEwiBlazor
             services.AddMvc();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSyncfusionBlazor(true);
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                // define the list of cultures your app will support
+                var supportedCultures = new List<CultureInfo>()
+                {
+                    new CultureInfo("pl"),
+                    new CultureInfo("en-US")
+                };
+                // set the default culture
+                options.DefaultRequestCulture = new RequestCulture("pl");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders = new List<IRequestCultureProvider>() {
+                 new QueryStringRequestCultureProvider() // Here, You can also use other localization provider
+                };
+            });
+            services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(Localization));
+
             services.AddSession();
             services.AddProtectedBrowserStorage();
 
@@ -45,6 +72,8 @@ namespace HUDEwiBlazor
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzE0MjcyQDMxMzgyZTMyMmUzMGRIeFFhUll0NkFYVmpPbWhlMnlUb2FseDZnZ3QrRUQyM3VHMUxYZ214UHc9");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +84,7 @@ namespace HUDEwiBlazor
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseRequestLocalization();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

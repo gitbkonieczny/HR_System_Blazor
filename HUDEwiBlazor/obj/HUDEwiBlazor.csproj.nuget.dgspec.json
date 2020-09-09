@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\BKC\\source\\repos\\HR_System_Blazor\\HUDEwiBlazor\\HUDEwiBlazor.csproj": {}
+    "C:\\Users\\BKC\\source\\repos\\ewiblazorserver\\HUDEwiBlazor\\HUDEwiBlazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\BKC\\source\\repos\\HR_System_Blazor\\HUDEwiBlazor\\HUDEwiBlazor.csproj": {
+    "C:\\Users\\BKC\\source\\repos\\ewiblazorserver\\HUDEwiBlazor\\HUDEwiBlazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\BKC\\source\\repos\\HR_System_Blazor\\HUDEwiBlazor\\HUDEwiBlazor.csproj",
+        "projectUniqueName": "C:\\Users\\BKC\\source\\repos\\ewiblazorserver\\HUDEwiBlazor\\HUDEwiBlazor.csproj",
         "projectName": "HUDEwiBlazor",
-        "projectPath": "C:\\Users\\BKC\\source\\repos\\HR_System_Blazor\\HUDEwiBlazor\\HUDEwiBlazor.csproj",
+        "projectPath": "C:\\Users\\BKC\\source\\repos\\ewiblazorserver\\HUDEwiBlazor\\HUDEwiBlazor.csproj",
         "packagesPath": "C:\\Users\\BKC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\BKC\\source\\repos\\HR_System_Blazor\\HUDEwiBlazor\\obj\\",
+        "outputPath": "C:\\Users\\BKC\\source\\repos\\ewiblazorserver\\HUDEwiBlazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\BKC\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -52,23 +53,27 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.7, )"
+              "version": "[3.1.8, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.7, )"
+              "version": "[3.1.8, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[3.1.7, )"
+              "version": "[3.1.8, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.7, )"
+              "version": "[3.1.8, )"
+            },
+            "Syncfusion.Blazor": {
+              "target": "Package",
+              "version": "[18.2.0.57, )"
             },
             "shortid": {
               "target": "Package",
@@ -93,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

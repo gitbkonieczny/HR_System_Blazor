@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.ProtectedBrowserStorage;
 using HUDEwiBlazor.Classes;
 using HUDEwiBlazor.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Builder;
+using Syncfusion.Blazor;
 
 namespace HUDEwiBlazor.Components
 {
@@ -24,7 +27,8 @@ namespace HUDEwiBlazor.Components
         public PasswordOptions PasswordOptions { get; }
 
         public string authorization_result = null;
-
+        [Inject]
+        IOptions<RequestLocalizationOptions> LocOptions { get; set; }
         [Inject]
         protected ApplicationDBContext _context { get; set; }
 
@@ -39,10 +43,12 @@ namespace HUDEwiBlazor.Components
         [Inject]
         protected ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
-       
-        [Parameter]
-        public Expression<Func<LoginModel>> For { get; set; }
-
+        [Inject]
+        protected ProtectedLocalStorage ProtectedLocalStorage { get; set; }
+        [Inject]
+        protected ISyncfusionStringLocalizer Localizer { get; set; }
+        //[Parameter]
+        //public Expression<Func<LoginModel>> For { get; set; }
         [Parameter]
         public string LinkCode { get; set; }
 
@@ -57,10 +63,15 @@ namespace HUDEwiBlazor.Components
             {
                 LinkExist = await _security.CheckLinkExist(LinkCode);
             }
+            
         }
 
+      
 
-
+        public string email_validation_message { get; set; }
+        public string password_validation_message { get; set; }
+        public string password_validation_1 { get; set; }
+        public string password_validation_2 { get; set; }
         public void GoToHomePage()
         {
             navigationManager.NavigateTo("/");
@@ -68,27 +79,60 @@ namespace HUDEwiBlazor.Components
         public async Task ValidFormSubmitted(EditContext editContext)
         {
             authorization_result = null;
+            email_validation_message = null;
+            password_validation_message = null;
+
+            LoginModel model = (LoginModel)editContext.Model;
+            if (model.email == "" || model.email == null)
+                email_validation_message = Localizer.GetText("Required");
+            if (model.password == "" || model.password == null)
+                password_validation_message = Localizer.GetText("Required");
+
+            if (email_validation_message != null || password_validation_message != null)
+            {
+                return;
+            }
+
+
             var security_result = await _security.Authenticate(loginModel.email, loginModel.password);
             if (security_result.Item1)
             {
                 await ProtectedSessionStore.SetAsync("GUID", security_result.Item2);
-                navigationManager.NavigateTo("/main");
+                var Locale = await ProtectedLocalStorage.GetAsync<string>("Culture");
+                if (Locale != null && Locale != "Select Culture")
+                {
+                    LocOptions.Value.SetDefaultCulture(Locale);
+
+                }
+
+                navigationManager.NavigateTo("/main",forceLoad:true);
             }
             else
             {
-                authorization_result = "Nieprawidłowy login/hasło";
+                
+                authorization_result = Localizer.GetText("WrongPassword");
                 loginModel.email = null;
                 loginModel.password = null;
             }
         }
         public void InvalidFormSubmitted(EditContext editContext)
         {
-            authorization_result = null;
+            
         }
 
         public async Task PasswordValidFormSubmitted(EditContext editContext)
         {
             authorization_result = null;
+            email_validation_message = null;
+
+            EmailModel model = (EmailModel)editContext.Model;
+            if (model.email == "" || model.email == null)
+            {
+                email_validation_message = Localizer.GetText("Required");
+                return;
+            }
+
+
             if (await _security.IsEmail(emailModel.email))
             {
                 var link = await _security.SaveLink(emailModel.email);
@@ -109,7 +153,7 @@ namespace HUDEwiBlazor.Components
             }
             else
             {
-                authorization_result = "Ten adress e-mail nie istnieje w HuDEwi!";
+                authorization_result = Localizer.GetText("EmailNotExist");
                 emailModel.email = null;
             }
         }
@@ -121,6 +165,18 @@ namespace HUDEwiBlazor.Components
 
         public async Task ChangePasswordValidFormSubmitted(EditContext editContext)
         {
+            password_validation_1 = null;
+            password_validation_2 = null;
+            PasswordChangeModel model = (PasswordChangeModel)editContext.Model;
+            if (model.password1 == "" || model.password1 == null)
+                password_validation_1 = Localizer.GetText("Required");
+            if (model.password2 == "" || model.password2 == null)
+                password_validation_2 = Localizer.GetText("Required");
+
+            if (password_validation_1 != null || password_validation_2 != null)
+            {
+                return;
+            }
             if (passwordChangeModel.password1 == passwordChangeModel.password2)
             {
                 var result = await _security.ChangePassword(passwordChangeModel.password1, LinkCode);
@@ -130,7 +186,8 @@ namespace HUDEwiBlazor.Components
                 }
             }else
             {
-                authorization_result = "Hasła są różne!";
+                authorization_result = Localizer.GetText("DiffrentPassword");
+                
             }
 
         }
@@ -141,31 +198,23 @@ namespace HUDEwiBlazor.Components
         }
     }
 
+   
+
     public class LoginModel
     {
-        [EmailAddress(ErrorMessage ="Nieprawidłowy adres e-mail")]
-        [Required(ErrorMessage ="Wymagane")]
+
         public string email { get; set; }
-        [Required(ErrorMessage = "Wymagane")]
         public string password { get; set; }
     }
     public class EmailModel
     {
-        [EmailAddress(ErrorMessage = "Nieprawidłowy adres e-mail")]
-        [Required(ErrorMessage = "Wymagane")]
         public string email { get; set; }
     }
 
     public class PasswordChangeModel
     {
-        [Required(ErrorMessage = "Wymagane")]
-        [StringLength(100, ErrorMessage = "Hasło musi składać się z min {2} i max {1} znaków.", MinimumLength = 8)]
-        [DataType(DataType.Password)]
         public string password1 { get; set; }
 
-        [Required(ErrorMessage = "Wymagane")]
-        [StringLength(100, ErrorMessage = "Hasło musi składać się z min {2} i max {1} znaków.", MinimumLength = 8)]
-        [DataType(DataType.Password)]
         public string password2 { get; set; }
 
     }

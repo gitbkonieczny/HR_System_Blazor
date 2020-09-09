@@ -1,34 +1,40 @@
 ﻿
 @inherits HUDEwiBlazor.Components.AuthenticateBase
+@inject ISyncfusionStringLocalizer  Localizer
 
 <EditForm class="login100-form validate-form" Model=@loginModel OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
     <DataAnnotationsValidator />
+    <LocalizatinSwitcher />
     <span class="login100-form-title p-b-43">
-        Logowanie do HUDEwi
+        @Localizer.GetText("LoggingTo")
     </span>
     <span class="flex-sb-m w-full">Email:</span>
     <div class="wrap-input100 validate-input">
         <input class="input100" type="text" @bind-value=loginModel.email name="email">
-        <ValidationMessage For="() => loginModel.email" />
+        <div class="validation-message">
+            @email_validation_message
+        </div>
         <span class="focus-input100"></span>
     </div>
     <br />
-    <span class="flex-sb-m w-full">Hasło:</span>
+    <span class="flex-sb-m w-full">@Localizer.GetText("Password"):</span>
     <div class="wrap-input100 validate-input">
         <input class="input100" type="password" @bind-value=loginModel.password name="password">
-        <ValidationMessage For="() => loginModel.password" />
+        <div class="validation-message">
+            @password_validation_message
+        </div>
         <span class="focus-input100"></span>
     </div>
     <br />
     <div class="flex-sb-m w-full p-t-3 p-b-32">
         <div>
-            <a href="/LoginPasswordReset"  class="txt1">
-                Resetowanie Hasła
+            <a href="/LoginPasswordReset" class="txt1">
+                @Localizer.GetText("PasswordReset")
             </a>
         </div>
         <div>
             <a href="https://ewidencja.hud.com.pl/mobile_resources/mobile_apk/com.hudinternationalpoland.ewimobil.apk" class="txt1">
-                Pobierz aplikację mobilną
+                @Localizer.GetText("MobileDownload")
             </a>
         </div>
     </div>
@@ -40,7 +46,8 @@
     }
     <div class="container-login100-form-btn">
         <button class="login100-form-btn">
-            Login
+            @Localizer.GetText("SignIn")
         </button>
     </div>
 </EditForm>
+<Document Title="@Localizer.GetText("Login")" />

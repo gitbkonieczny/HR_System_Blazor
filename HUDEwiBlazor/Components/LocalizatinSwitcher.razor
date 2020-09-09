@@ -1,0 +1,68 @@
+﻿@inject NavigationManager NavigationManager
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@using Microsoft.Extensions.Options;
+@using Microsoft.AspNetCore.Builder;
+
+<div class="culture_div">
+    <select @onchange="OnSelected" style="width:50%" value="@value">
+        <option value="pl">Polish</option>
+        <option value="en-US">English</option>
+        <option value="de">German</option>
+    </select>
+</div>
+
+
+@code {
+
+    [Inject]
+    IOptions<RequestLocalizationOptions> LocOptions { get; set; }
+
+    public string value;
+    protected override async Task OnInitializedAsync()
+    {
+        value = await ProtectedLocalStorage.GetAsync<string>("Culture");
+        if (value == null)
+        {
+            value = "pl";
+        }
+        StateHasChanged();
+    }
+    private async Task OnSelected(ChangeEventArgs e)
+    {
+        var culture = (string)e.Value;
+        var uri = new Uri(NavigationManager.Uri)
+            .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+
+        await ProtectedLocalStorage.SetAsync("Culture", culture);
+        LocOptions.Value.SetDefaultCulture(culture);
+
+        NavigationManager.NavigateTo(uri, forceLoad: true);
+    }
+
+
+}
+
+<style>
+    .culture_div {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+        width: 100%;
+        height: 50px;
+        border-radius: 10px;
+        font-family: Montserrat-Bold;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        -webkit-transition: all 0.4s;
+        -o-transition: all 0.4s;
+        -moz-transition: all 0.4s;
+        transition: all 0.4s;
+        margin: 10px 0px 10px 0px !important;
+    }
+</style>

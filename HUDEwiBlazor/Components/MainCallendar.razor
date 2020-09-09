@@ -1,0 +1,11 @@
+﻿
+    <SfCalendar ID="calendar" TValue="DateTime" FirstDayOfWeek="1" ServerTimezoneOffset="2" IsMultiSelection="false">
+        <CalendarEvents TValue="DateTime?" OnRenderDayCell="onRenderDayCellHandler"></CalendarEvents>
+    </SfCalendar>
+
+@code{
+    public void onRenderDayCellHandler(RenderDayCellEventArgs args)
+    {
+        int i = 0;
+    }
+}
