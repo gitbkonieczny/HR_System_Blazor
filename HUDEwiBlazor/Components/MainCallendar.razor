@@ -1,11 +1,184 @@
-﻿
-    <SfCalendar ID="calendar" TValue="DateTime" FirstDayOfWeek="1" ServerTimezoneOffset="2" IsMultiSelection="false">
-        <CalendarEvents TValue="DateTime?" OnRenderDayCell="onRenderDayCellHandler"></CalendarEvents>
-    </SfCalendar>
+﻿@inherits HUDEwiBlazor.Components.MainCallendarBase
+@inject ISyncfusionStringLocalizer Localizer
+@using System.Globalization; 
+<div id="calender-control" class="multiselectWrapper">
+    <div id="calendar" class="e-control e-calendar e-lib e-keyboard" tabindex="0">
+        <div class="e-header e-month">
+            <div class="e-day e-title" aria-atomic="true" aria-live="assertive" aria-label="title">@ActualDate.ToString("MMMM yyyy")</div>
+            <div class="e-icon-container">
+                <button class="e-prev" type="button" aria-disabled="false" aria-label="previous month" @onclick="OnLastMonth">
+                    <span class="e-date-icon-prev e-icons"></span>
+                </button>
+                <button class="e-next" type="button" aria-disabled="false" aria-label="next month" @onclick="OnNextMonth">
+                    <span class="e-date-icon-next  e-icons"></span>
+                </button>
+            </div>
+        </div>
+        <div class="e-content e-month">
+            <table tabindex="0" role="grid" aria-activedescendant="">
+                <thead class="e-week-header">
+                    <tr>
+                        @foreach (var day in DaysHeader)
+                        {
+                            <th>@DateTimeFormatInfo.CurrentInfo.GetShortestDayName((DayOfWeek)day)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        for (int i = 0; i < Days.Count; i = i + 7)
+                        {
+                            <tr class="" role="row">
+                                @for (int day = i; day < i + 7; day++)
+                                {
+                                    string cell_id = Days[day].cell_id;
+                                    <td class="@Days[day].CellClasses" id="@cell_id" aria-selected="false" role="gridcell" @onclick="@(e=>OnSelected(e, cell_id))">
+                                        <span title="@Days[day].SpanTitle" class="@Days[day].DayClasses">@Days[day].Day.Day</span>
+                                        <span class="desc">@Days[day].DescTitle</span>
+                                    </td>
+                                }
 
-@code{
-    public void onRenderDayCellHandler(RenderDayCellEventArgs args)
-    {
-        int i = 0;
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="e-footer-container">
+            <button role="button" aria-label="Dzisiaj" class="e-btn  e-today e-flat e-primary e-css" @onclick="RenderToToday">@Localizer.GetText("Calendar_Today")</button>
+        </div>
+        
+    </div>
+</div>
+
+<div class="e-grid">
+    <table tabindex="1" role="grid" aria-activedescendant="" width="100%">
+        <tbody>
+            @foreach (var day in simpleScheduleModel)
+            {
+                string id = day.Date.ToString("d_M_yyyy");
+                <tr class="" role="row">
+                    <td class="e-rowcell" id="Date_@id">@day.DateFormated</td>
+                    <td class="e-rowcell" id="FromFormated_@id">@day.FromFormated</td>
+                    <td class="e-rowcell" id="ToFormated_@id">@day.ToFormated</td>
+                    <td class="e-rowcell" id="Confirmed_@id">
+                        @if (day.Confirmed == true)
+                        {
+                            <div class="e-checkbox-wrapper e-css e-checkbox-disabled"><span class="e-frame e-icons e-check"></span><span class="e-label"> </span></div>
+                        }
+                        else
+                        {
+                            <div class="e-checkbox-wrapper e-css e-checkbox-disabled"><span class="e-frame e-icons"></span><span class="e-label"> </span></div>
+                        }
+                    </td>
+                    <td class="e-rowcell" id="Td_button_@id">
+                        @if (day.Confirmed == false)
+                        {
+                            <div class="e-unboundcelldiv" style="display: inline-block"><button @onclick="@(e=>OnConfirm(e, id))" id="Button_@id" type="button" title="@Localizer.GetText("Confirm")" class="e-lib e-btn e-control e-flat e-conf">@Localizer.GetText("Confirm")</button></div>
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+
+    .abs_free {
+        color:darkgrey !important; 
+        font-weight:1000 !important;
     }
-}
+    .e-cell-confirmed {
+        color: lightgreen !important;
+        font-weight: 1000 !important;
+    }
+    .e-checkbox-wrapper.e-checkbox-disabled .e-frame.e-check, .e-css.e-checkbox-wrapper.e-checkbox-disabled .e-frame.e-check {
+        background-color: lightgreen;
+        border-color: lightgreen;
+        color: #fff;
+    }
+    .e-btn {
+        font-size: 10px !important;
+        height: 20px !important;
+    }
+    .e-grid .e-rowcell {
+        font-size: 10px !important;
+    }
+    .e-grid {
+        background-color: #fff !important;
+    }
+    .control-section {
+        height: 100%;
+    }
+
+    .e-calendar {
+        max-width: none !important;
+    }
+
+    span.highlight {
+        font-family: Poppins-Regular, sans-serif;
+        font-size: 10px;
+        display: block;
+        margin-left: -5px;
+        width: auto;
+        height: 20px;
+    }
+
+    span.desc,
+    span.desc:before {
+        color: rgb(0, 0, 255) !important;
+    }
+
+    .e-other-month span.desc:before {
+        content: "";
+    }
+
+    span.desc:before {
+        content: "";
+        vertical-align: middle;
+        margin-right: 3px;
+        font-size: 4px;
+        position: relative;
+        top: 0px;
+        font-weight: normal;
+        display: block;
+    }
+
+    .e-bigger.e-calendar span.desc:before,
+    .e-bigger .e-calendar span.desc:before {
+    }
+
+    .e-calendar .e-content td.public span.e-day, .e-calendar .e-content td.public:hover span.e-day, .e-calendar .e-content td.public:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.public span.e-day, .e-bigger.e-small .e-calendar .e-content td.public:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.public:focus span.e-day {
+        color: red !important;
+        font-weight: 1000;
+    }
+
+
+    .e-calendar .e-content td.nopublic span.e-day, .e-calendar .e-content td.nopublic:hover span.e-day, .e-calendar .e-content td.nopublic:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.nopublic:focus span.e-day {
+        color: blue !important;
+    }
+
+
+    .e-calendar .e-content td.e-highlightsunday span.e-day, .e-calendar .e-content td.e-highlightsunday:hover span.e-day, .e-calendar .e-content td.e-highlightsunday:focus span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday:hover span.e-day, .e-bigger.e-small .e-calendar .e-content td.e-highlightsunday:focus span.e-day {
+        color: red !important;
+        font-weight: 1000;
+    }
+
+    .e-calendar .e-content td.e-weekend:not(.e-other-month), .e-calendar .e-content td.e-weekend:hover:not(.e-other-month), .e-calendar .e-content td.e-weekend:focus:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:hover:not(.e-other-month), .e-bigger.e-small .e-calendar .e-content td.e-weekend:focus:not(.e-other-month) {
+        background-color: lightgrey;
+    }
+
+    .e-calendar .e-content td, .e-calendar .e-content td:hover, .e-calendar .e-content td:focus, .e-bigger.e-small .e-calendar .e-content td, .e-bigger.e-small .e-calendar .e-content td:hover, .e-bigger.e-small .e-calendar .e-content td:focus {
+        vertical-align: top;
+        height: 50px;
+    }
+
+   .e-calendar .e-content td.e-disabled, .e-bigger.e-small .e-calendar .e-content td.e-disabled {
+            opacity: 0.8 !important;
+        }
+
+   .e-calendar .e-content td.e-cell, .e-bigger.e-small .e-calendar .e-content td.e-cell {
+            height: 50px !important;
+        }
+</style>

@@ -141,12 +141,9 @@ namespace HUDEwiBlazor.Components
                 EmailMessage.FromAddresses.Add(new EmailAddress { Name = "H&D Ewi", Address = "Administracja@hud.pl" });
 
                 EmailMessage.ToAddresses.Add(new EmailAddress { Name = user.Name + " " + user.Surname, Address = user.Email });
-                EmailMessage.Subject = "Wysłano prośbę o wygenerowanie nowego hasła.";
-                EmailMessage.Content = "Aby zmienić hasło kliknij w link -> <a href=\""+navigationManager.BaseUri+"LoginPasswordChange/" + link.Link + "\">Zmiana Hasła</a>" +
-                         "<BR /><BR /><p style=\"font-size:8px\">UWAGA: Wiadomość została wygenerowana automatycznie, prosimy na nią nie odpowiadać.<BR />" +
-                         "W przypadku pytań lub wątpliwości, prosimy o kontakt za pomocą drogi mailowej na adres: Administracja@hud.pl<BR /><BR />" +
-                         "Wiadomość przeznaczona jest wyłącznie dla jej zamierzonego adresata i może zawierać informacje zastrzeżone i prawnie chronione.<BR />" +
-                         "Jeżeli otrzymałeś ją przez pomyłkę, prosimy o poinformowanie nas o tym fakcie za pomocą ww. e - maila kontaktowego.</p>";
+                EmailMessage.Subject = Localizer.GetText("MailSubjectPasswordCreate");
+                EmailMessage.Content = Localizer.GetText("MailHrefLink") +" <a href=\""+navigationManager.BaseUri+"LoginPasswordChange/" + link.Link + "\">"+Localizer.GetText("ChangePassword") +" </a>" 
+                    +Localizer.GetText("MailFooter");
 
                 _emailService.Send(EmailMessage);
                 navigationManager.NavigateTo("/LoginPasswordSendLinkConfirmation");

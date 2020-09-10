@@ -47,6 +47,7 @@ namespace HUDEwiBlazor
                 var supportedCultures = new List<CultureInfo>()
                 {
                     new CultureInfo("pl"),
+                    new CultureInfo("de"),
                     new CultureInfo("en-US")
                 };
                 // set the default culture
@@ -66,6 +67,10 @@ namespace HUDEwiBlazor
 
             services.AddTransient<ISecurity, Security>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IScheduleService, ScheduleService>();
+            services.AddTransient<IHolidayApiService, HolidayApiService>();
+            services.AddTransient<IDayActionsService, DayActionsService>();
+            services.AddTransient<IWorkCardService, WorkCardService>();
 
         }
 

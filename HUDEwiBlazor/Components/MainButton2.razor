@@ -5,7 +5,10 @@
 </div>
 
 @code{
-   
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
     [Parameter]
     public string type { get; set; }
 
@@ -21,6 +24,9 @@
 
     protected void NavigateTo()
     {
-        navigationManager.NavigateTo(Url);
+        if (Url != "#")
+        {
+            navigationManager.NavigateTo(Url);
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace HUDEwiBlazor.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -1037,6 +1037,59 @@ namespace HUDEwiBlazor.Migrations
                         .IsUnique();
 
                     b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("HUDEwiBlazor.Data.Models.SystemSettings", b =>
+                {
+                    b.Property<int>("AttendanceReminderLimit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BookingEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DayTimeEndHour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayTimeEndMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayTimeStartHour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayTimeStartMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HolidaysMaxPerYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HolidaysOnDemandMaxPerYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverTimeMaxPerDay")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverTimeMaxPerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverTimeMaxPerYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverTimePay50PerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestPeriod")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleGenerateDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServerIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServerPort")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("SystemSettings");
                 });
 
             modelBuilder.Entity("HUDEwiBlazor.Data.Models.Teams", b =>

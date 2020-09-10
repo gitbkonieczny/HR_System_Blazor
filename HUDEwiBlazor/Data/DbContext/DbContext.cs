@@ -272,6 +272,7 @@ namespace HUDEwiBlazor.Data
             modelBuilder.Entity<PasswordOptions>().HasNoKey();
 
             modelBuilder.Entity<EmailSettings>().HasNoKey();
+            modelBuilder.Entity<SystemSettings>().HasNoKey();
 
         }
 
@@ -312,6 +313,7 @@ namespace HUDEwiBlazor.Data
         public DbSet<Messages> Messages { get; set; }
         public DbSet<PasswordOptions> PasswordOptions { get; set; }
         public DbSet<EmailSettings> EmailSettings { get; set; }
+        public DbSet<SystemSettings> SystemSettings { get; set; }
 
     }
 }

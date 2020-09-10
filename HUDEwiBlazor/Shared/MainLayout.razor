@@ -35,7 +35,7 @@ else
         guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
         if (guid == null)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/",forceLoad:true);
         }
 
     }

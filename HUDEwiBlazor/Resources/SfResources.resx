@@ -5064,4 +5064,37 @@
   <data name="YourWorkSchedule" xml:space="preserve">
     <value>Your work schedule:</value>
   </data>
+  <data name="ConfirmDayNok" xml:space="preserve">
+    <value>The work schedule cannot be confirmed. Please contact the administrator.</value>
+  </data>
+  <data name="ConfirmDayOk" xml:space="preserve">
+    <value>Day at work correctly confirmed!</value>
+  </data>
+  <data name="DayLimit" xml:space="preserve">
+    <value>Can't be confirmed. Days back limit = </value>
+  </data>
+  <data name="FutureConfirm" xml:space="preserve">
+    <value>Future date cannot be confirmed!</value>
+  </data>
+  <data name="MonthClosed" xml:space="preserve">
+    <value>Presence cannot be confirmed after month-end. Please contact the administrator.</value>
+  </data>
+  <data name="NotExistWorkCard" xml:space="preserve">
+    <value>Your Worksheet does not exist! Please contact the administrator.</value>
+  </data>
+  <data name="AlreadyConfirmed" xml:space="preserve">
+    <value>Attendance has already been confirmed for today</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Password change</value>
+  </data>
+  <data name="MailFooter" xml:space="preserve">
+    <value>&lt;BR /&gt; &lt;BR /&gt; &lt;p style = "font-size: 8px "&gt; NOTE: The message was generated automatically, please do not reply to it. &lt;BR /&gt; If you have any questions or concerns, please contact us by by e-mail to the following address: Administracja@hud.pl &lt;BR /&gt; &lt;BR /&gt; The message is intended only for its intended addressee and may contain proprietary and legally protected information. &lt;BR /&gt; If you received it by mistake, please inform us about this fact by means of the above-mentioned contact email. &lt;/p&gt;</value>
+  </data>
+  <data name="MailHrefLink" xml:space="preserve">
+    <value>To change the password, click on the link -&gt;</value>
+  </data>
+  <data name="MailSubjectPasswordCreate" xml:space="preserve">
+    <value>A request to create a new password has been sent.</value>
+  </data>
 </root>

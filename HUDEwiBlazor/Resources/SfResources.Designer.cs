@@ -79,6 +79,15 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Attendance has already been confirmed for today.
+        /// </summary>
+        public static string AlreadyConfirmed {
+            get {
+                return ResourceManager.GetString("AlreadyConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu The Request Failed.
         /// </summary>
         public static string AutoComplete_ActionFailureTemplate {
@@ -120,6 +129,15 @@ namespace HUDEwiBlazor.Resources {
         public static string Change {
             get {
                 return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Password change.
+        /// </summary>
+        public static string ChangePassword {
+            get {
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
             }
         }
         
@@ -228,6 +246,24 @@ namespace HUDEwiBlazor.Resources {
         public static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu The work schedule cannot be confirmed. Please contact the administrator..
+        /// </summary>
+        public static string ConfirmDayNok {
+            get {
+                return ResourceManager.GetString("ConfirmDayNok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Day at work correctly confirmed!.
+        /// </summary>
+        public static string ConfirmDayOk {
+            get {
+                return ResourceManager.GetString("ConfirmDayOk", resourceCulture);
             }
         }
         
@@ -345,6 +381,15 @@ namespace HUDEwiBlazor.Resources {
         public static string DateTimePicker_Today {
             get {
                 return ResourceManager.GetString("DateTimePicker_Today", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Can&apos;t be confirmed. Days back limit = .
+        /// </summary>
+        public static string DayLimit {
+            get {
+                return ResourceManager.GetString("DayLimit", resourceCulture);
             }
         }
         
@@ -5245,6 +5290,15 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Future date cannot be confirmed!.
+        /// </summary>
+        public static string FutureConfirm {
+            get {
+                return ResourceManager.GetString("FutureConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Above.
         /// </summary>
         public static string Gantt_Above {
@@ -7072,6 +7126,33 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu &lt;BR /&gt; &lt;BR /&gt; &lt;p style = &quot;font-size: 8px &quot;&gt; NOTE: The message was generated automatically, please do not reply to it. &lt;BR /&gt; If you have any questions or concerns, please contact us by by e-mail to the following address: Administracja@hud.pl &lt;BR /&gt; &lt;BR /&gt; The message is intended only for its intended addressee and may contain proprietary and legally protected information. &lt;BR /&gt; If you received it by mistake, please inform us about this fact by means of the above-mentioned contact email. &lt;/p&gt;.
+        /// </summary>
+        public static string MailFooter {
+            get {
+                return ResourceManager.GetString("MailFooter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu To change the password, click on the link -&gt;.
+        /// </summary>
+        public static string MailHrefLink {
+            get {
+                return ResourceManager.GetString("MailHrefLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu A request to create a new password has been sent..
+        /// </summary>
+        public static string MailSubjectPasswordCreate {
+            get {
+                return ResourceManager.GetString("MailSubjectPasswordCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Pan.
         /// </summary>
         public static string Maps_Pan {
@@ -7126,6 +7207,15 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Presence cannot be confirmed after month-end. Please contact the administrator..
+        /// </summary>
+        public static string MonthClosed {
+            get {
+                return ResourceManager.GetString("MonthClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu The Request Failed.
         /// </summary>
         public static string MultiSelect_ActionFailureTemplate {
@@ -7176,6 +7266,15 @@ namespace HUDEwiBlazor.Resources {
         public static string MultiSelect_UnSelectAllText {
             get {
                 return ResourceManager.GetString("MultiSelect_UnSelectAllText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your Worksheet does not exist! Please contact the administrator..
+        /// </summary>
+        public static string NotExistWorkCard {
+            get {
+                return ResourceManager.GetString("NotExistWorkCard", resourceCulture);
             }
         }
         

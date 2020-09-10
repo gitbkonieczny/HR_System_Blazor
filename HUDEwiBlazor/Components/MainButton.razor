@@ -1,6 +1,6 @@
 ﻿
 
-<a class="t-link @type-c" href="#" @onmouseover="over_out_button" @onmouseout="over_out_button" @onclick="NavigateTo">
+<a class="t-link @type-c" style="cursor:pointer" @onmouseover="over_out_button" @onmouseout="over_out_button" @onclick="NavigateTo">
     <img class="@type" src="@src_t" />
     <span>@Title</span>
 </a>
@@ -11,6 +11,9 @@
     {
         src_t = src;
     }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
 
     [Parameter]
     public string type { get; set; }
@@ -49,6 +52,9 @@
 
     protected void NavigateTo()
     {
-        navigationManager.NavigateTo(Url);
+        if (Url != "#")
+        {
+            navigationManager.NavigateTo(Url);
+        }
     }
 }

@@ -5181,4 +5181,37 @@
   <data name="YourWorkSchedule" xml:space="preserve">
     <value>Ihr Arbeitsplan:</value>
   </data>
+  <data name="ConfirmDayNok" xml:space="preserve">
+    <value>Der Arbeitsplan kann nicht bestätigt werden. Bitte wenden Sie sich an den Administrator.</value>
+  </data>
+  <data name="ConfirmDayOk" xml:space="preserve">
+    <value>Arbeitstag richtig bestätigt!</value>
+  </data>
+  <data name="DayLimit" xml:space="preserve">
+    <value>Kann nicht bestätigt werden. Tage zurück Limit = </value>
+  </data>
+  <data name="FutureConfirm" xml:space="preserve">
+    <value>Zukünftiges Datum kann nicht bestätigt werden!</value>
+  </data>
+  <data name="MonthClosed" xml:space="preserve">
+    <value>Die Anwesenheit kann nach Monatsende nicht bestätigt werden. Bitte wenden Sie sich an den Administrator.</value>
+  </data>
+  <data name="NotExistWorkCard" xml:space="preserve">
+    <value>Ihr Arbeitsblatt existiert nicht! Bitte wenden Sie sich an den Administrator.</value>
+  </data>
+  <data name="AlreadyConfirmed" xml:space="preserve">
+    <value>Die Teilnahme wurde bereits für heute bestätigt</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Passwortänderung</value>
+  </data>
+  <data name="MailFooter" xml:space="preserve">
+    <value>&lt;BR /&gt; &lt;BR /&gt; &lt;p style = "font-size: 8px "&gt; HINWEIS: Die Nachricht wurde automatisch generiert. Bitte antworten Sie nicht darauf. &lt;BR /&gt; Wenn Sie Fragen oder Bedenken haben, wenden Sie sich bitte an per E-Mail an folgende Adresse: Administracja@hud.pl &lt;BR /&gt; &lt;BR /&gt; Die Nachricht ist nur für den vorgesehenen Adressaten bestimmt und enthält möglicherweise geschützte und gesetzlich geschützte Informationen. &lt;BR /&gt; Wenn Sie sie versehentlich erhalten haben, informieren Sie uns bitte darüber diese Tatsache mittels der oben genannten Kontakt-E-Mail. &lt;/ p&gt;</value>
+  </data>
+  <data name="MailHrefLink" xml:space="preserve">
+    <value>Um das Passwort zu ändern, klicken Sie auf den Link -&gt;</value>
+  </data>
+  <data name="MailSubjectPasswordCreate" xml:space="preserve">
+    <value>Eine Anfrage zum Erstellen eines neuen Passworts wurde gesendet.</value>
+  </data>
 </root>

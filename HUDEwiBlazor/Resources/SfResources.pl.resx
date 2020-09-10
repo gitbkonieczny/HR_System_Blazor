@@ -5040,4 +5040,37 @@
   <data name="YourWorkSchedule" xml:space="preserve">
     <value>Twój grafik pracy:</value>
   </data>
+  <data name="ConfirmDayNok" xml:space="preserve">
+    <value>Nie można potwierdzić grafiku dnia pracy. Skontaktuj się z administratorem.</value>
+  </data>
+  <data name="ConfirmDayOk" xml:space="preserve">
+    <value>Poprawnie potwierdzono dzień w pracy!</value>
+  </data>
+  <data name="DayLimit" xml:space="preserve">
+    <value>Nie można potwierdzić. Limit dni wstecz = </value>
+  </data>
+  <data name="FutureConfirm" xml:space="preserve">
+    <value>Nie można potwierdzić przyszłej daty !</value>
+  </data>
+  <data name="MonthClosed" xml:space="preserve">
+    <value>Nie można potwierdzić obecności po zamknięciu miesiąca. Skontaktuj się z administratorem.</value>
+  </data>
+  <data name="NotExistWorkCard" xml:space="preserve">
+    <value>Twoja Karta pracy nie istnieje ! Skontaktuj się z administratorem.</value>
+  </data>
+  <data name="AlreadyConfirmed" xml:space="preserve">
+    <value>Potwierdzono już obecność za dzisiejszy dzień</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Zmiana hasła</value>
+  </data>
+  <data name="MailFooter" xml:space="preserve">
+    <value>&lt;BR /&gt;&lt;BR /&gt;&lt;p style="font-size:8px"&gt;UWAGA: Wiadomość została wygenerowana automatycznie, prosimy na nią nie odpowiadać.&lt;BR /&gt;W przypadku pytań lub wątpliwości, prosimy o kontakt za pomocą drogi mailowej na adres: Administracja@hud.pl&lt;BR /&gt;&lt;BR /&gt;Wiadomość przeznaczona jest wyłącznie dla jej zamierzonego adresata i może zawierać informacje zastrzeżone i prawnie chronione.&lt;BR /&gt;Jeżeli otrzymałeś ją przez pomyłkę, prosimy o poinformowanie nas o tym fakcie za pomocą ww. e - maila kontaktowego.&lt;/p&gt;</value>
+  </data>
+  <data name="MailHrefLink" xml:space="preserve">
+    <value>Aby zmienić hasło kliknij w link -&gt;</value>
+  </data>
+  <data name="MailSubjectPasswordCreate" xml:space="preserve">
+    <value>Wysłano prośbę o utworzenie nowego hasła.</value>
+  </data>
 </root>

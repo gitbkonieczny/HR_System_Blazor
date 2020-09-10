@@ -3,20 +3,42 @@
 @inject ISyncfusionStringLocalizer  Localizer
 @inject ProtectedSessionStorage ProtectedSessionStorage
 @using HUDEwiBlazor.Data;
+@using Syncfusion.Blazor.Notifications;
+@using HUDEwiBlazor.Components;
 @inject ApplicationDBContext _context
+@inject ProtectedSessionStorage SessionStorage
+@inject NavigationManager NavigationManager
 @code
 {
+    protected SfToast ToastObj;
+    protected MainCallendar callendar;
     private string Name { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
-        var emp = _context.Employees.Where(x => x.GUID == guid).Select(x => new { x.Name, x.Surname }).FirstOrDefault();
-        Name = string.Join(" ", emp.Name, emp.Surname);
+        if (guid != null)
+        {
+            var emp = _context.Employees.Where(x => x.GUID == guid).Select(x => new { x.Name, x.Surname }).FirstOrDefault();
+            if (emp!=null)
+            {
+                Name = string.Join(" ", emp.Name, emp.Surname);
+            }
+        }
     }
+
+    protected async Task LogOut()
+    {
+        await SessionStorage.DeleteAsync("GUID");
+        NavigationManager.NavigateTo("/",forceLoad:true);
+    }
+
+
 
 }
 <div class="limiter">
-
+    <SfToast ID="toast_default" @ref="ToastObj" TimeOut="5000" Icon="e-meeting">
+        <ToastPosition X="Center"></ToastPosition>
+    </SfToast>
     <div class="container-login100">
         <div class="wrap-login100">
             <div class="login100-form validate-form">
@@ -27,31 +49,25 @@
                 <span class="login100-form-title p-b-43">
                     @Localizer.GetText("YourWorkSchedule")
                 </span>
-                <br />
                 <div id="calender-control" class="multiselectWrapper">
-                    <MainCallendar />
+                    <MainCallendar @ref="callendar" @bind-BindingToast="ToastObj" />
                 </div>
                 <div class="schedule-section">
 
 
                 </div>
-                <ejs-dialog id="confirm_dialog" animationSettings="confirmanimation" open="dialogOpen" close="dialogClose" visible="false" width="400px" height="300px" target="#demand_dialog" showCloseIcon="true">
-                    <e-dialog-buttons>
-                        <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton" click="confirmBtnClick"></e-dialog-dialogbutton>
-                        <e-dialog-dialogbutton buttonModel="ViewBag.confirmbutton1" click="confirmBtnClickNo"></e-dialog-dialogbutton>
-                    </e-dialog-buttons>
-                </ejs-dialog>
+
                 <br />
                 <br />
                 <div class="container d-md-none d-lg-none d-xl-none">
-                    <MainButton2 Title="@Localizer.GetText("Acknowledge_presence")" Url="#" type="attendance" />
+                    <div @onclick="@(e=>callendar.OnConfirm(e, "Today"))"><MainButton2 Title="@Localizer.GetText("Acknowledge_presence")" Url="#" type="attendance" /></div>
                     <MainButton2 Title="@Localizer.GetText("Vacation_On_Request")" Url="#" type="demand" />
                     <MainButton2 Title="@Localizer.GetText("Vacation_Leave")" Url="#" type="holidays" />
                     <MainButton2 Title="@Localizer.GetText("Work_Schedule")" Url="#" type="schedule" />
                     <MainButton2 Title="@Localizer.GetText("Advanced")" Url="#" type="advanced" />
 
                 </div>
-                <MainButton2 Title="@Localizer.GetText("LogOutEwi")" Url="#" type="logout" />
+                <div @onclick="LogOut"><MainButton2 Title="@Localizer.GetText("LogOutEwi")" Url="#" type="logout" /></div>
 
             </div>
             <div class="login100-more2" style="background-repeat:no-repeat; background-image: url('../images/hud_slide.jpg');">
@@ -62,7 +78,9 @@
                         <div class="col-sm-4">
                             <div class="thumbnail_container">
                                 <div class="thumbnail">
-                                    <MainButton Url="#" type="attendance" Title="@Localizer.GetText("Acknowledge_presence")" src="../images/attendance.jpg" hover_src="../images/attendance-t.jpg" />
+                                    <div @onclick="@(e=>callendar.OnConfirm(e, "Today"))">
+                                        <MainButton Url="#" type="attendance" Title="@Localizer.GetText("Acknowledge_presence")" src="../images/attendance.jpg" hover_src="../images/attendance-t.jpg" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
