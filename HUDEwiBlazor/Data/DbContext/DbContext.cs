@@ -159,6 +159,19 @@ namespace HUDEwiBlazor.Data
                 .WithMany(td => td.LinkTeamsEmployee)
                 .HasForeignKey(t => t.TeamId);
 
+
+            modelBuilder.Entity<LinkRolesMenuItem>()
+              .HasOne<Roles>(d => d.Role)
+              .WithMany(td => td.LinkRolesMenuItem)
+              .HasForeignKey(d => d.RoleID)
+            .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<LinkRolesMenuItem>()
+                .HasOne<MenuItem>(t => t.MenuItem)
+                .WithMany(td => td.LinkRolesMenuItem)
+                .HasForeignKey(t => t.MenuItemID)
+            .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Teams>()
                  .HasOne<Employee>(t => t.TeamLeader)
                  .WithMany(td => td.Teams)
@@ -274,6 +287,16 @@ namespace HUDEwiBlazor.Data
             modelBuilder.Entity<EmailSettings>().HasNoKey();
             modelBuilder.Entity<SystemSettings>().HasNoKey();
 
+            modelBuilder.Entity<MenuItem>()
+                .HasKey(x => x.MenuItemId);
+
+            modelBuilder.Entity<MenuItem>()
+                .HasMany(x => x.Items)
+                .WithOne(x => x.Parent)
+                .HasForeignKey(x=>x.ParentID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+          
         }
 
 
@@ -314,6 +337,8 @@ namespace HUDEwiBlazor.Data
         public DbSet<PasswordOptions> PasswordOptions { get; set; }
         public DbSet<EmailSettings> EmailSettings { get; set; }
         public DbSet<SystemSettings> SystemSettings { get; set; }
+        public DbSet<MenuItem> MenuItem { get; set; }
+        public DbSet<LinkRolesMenuItem> LinkRolesMenuItem { get; set; }
 
     }
 }

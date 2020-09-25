@@ -45,7 +45,7 @@
             </table>
         </div>
         <div class="e-footer-container">
-            <button role="button" aria-label="Dzisiaj" class="e-btn  e-today e-flat e-primary e-css" @onclick="RenderToToday">@Localizer.GetText("Calendar_Today")</button>
+            <SfButton @onclick="RenderToToday">@Localizer.GetText("Calendar_Today")</SfButton>
         </div>
         
     </div>
@@ -74,7 +74,7 @@
                     <td class="e-rowcell" id="Td_button_@id">
                         @if (day.Confirmed == false)
                         {
-                            <div class="e-unboundcelldiv" style="display: inline-block"><button @onclick="@(e=>OnConfirm(e, id))" id="Button_@id" type="button" title="@Localizer.GetText("Confirm")" class="e-lib e-btn e-control e-flat e-conf">@Localizer.GetText("Confirm")</button></div>
+                            <div class="e-unboundcelldiv" style="display: inline-block"><SfButton @onclick="@(e=>OnConfirm(e, id))">@Localizer.GetText("Confirm")</SfButton></div>
 
                         }
                     </td>
@@ -99,11 +99,10 @@
         color: #fff;
     }
     .e-btn {
-        font-size: 10px !important;
-        height: 20px !important;
+        background-color: #6675df !important;
     }
     .e-grid .e-rowcell {
-        font-size: 10px !important;
+        height:50px !important;
     }
     .e-grid {
         background-color: #fff !important;

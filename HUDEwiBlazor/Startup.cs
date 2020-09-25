@@ -18,6 +18,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.ProtectedBrowserStorage;
+using AutoMapper;
 
 namespace HUDEwiBlazor
 {
@@ -37,9 +38,19 @@ namespace HUDEwiBlazor
             services.AddMvc();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSyncfusionBlazor(true);
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddSyncfusionBlazor();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
 
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper); 
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddSignalR(e =>
+            {
+                e.MaximumReceiveMessageSize = 1024000000;
+            });
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -63,7 +74,7 @@ namespace HUDEwiBlazor
             services.AddSession();
             services.AddProtectedBrowserStorage();
 
-            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HrHudConnection")));
+            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HrHudConnection")), ServiceLifetime.Transient);
 
             services.AddTransient<ISecurity, Security>();
             services.AddTransient<IEmailService, EmailService>();
@@ -71,6 +82,8 @@ namespace HUDEwiBlazor
             services.AddTransient<IHolidayApiService, HolidayApiService>();
             services.AddTransient<IDayActionsService, DayActionsService>();
             services.AddTransient<IWorkCardService, WorkCardService>();
+            services.AddTransient<IOrganizationService, OrganizationService>();
+            services.AddTransient<IImageProcessing, ImageProcessing>();
 
         }
 

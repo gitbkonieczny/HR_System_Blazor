@@ -1,0 +1,126 @@
+﻿
+@inject ISyncfusionStringLocalizer  Localizer
+@inject IHolidayApiService HolidayApi
+
+
+<div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfTextBox ID="Name" @bind-Value="@(employee.Name)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("FirstName")"></SfTextBox>
+        </div>
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfTextBox ID="Surname" @bind-Value="@(employee.Surname)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Surname")"></SfTextBox>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfTextBox ID="ShortCut" @bind-Value="@(employee.ShortCut)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Shortcut")"></SfTextBox>
+        </div>
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfTextBox ID="PersonalNumber" @bind-Value="@(employee.PersonalNumber)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("PersonalNumber")"></SfTextBox>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDatePicker ID="BirthDate" TValue="DateTime?" @bind-Value="@(employee.BirthDate)" Format="dd-MM-yyyy" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("BirthDate")" Start="CalendarView.Decade"></SfDatePicker>
+        </div>
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDropDownList ID="Gender" TValue="int?" @bind-Value="@(employee.Gender)" TItem="Gender" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Sex")" DataSource="@_genders">
+                <DropDownListFieldSettings Text="Value" Value="Value"></DropDownListFieldSettings>
+                <DropDownListTemplates TItem="Gender">
+                    <ItemTemplate Context="context2">
+                        @((context2 as Gender).Name)
+                    </ItemTemplate>
+                    <ValueTemplate Context="context2">
+                        <span class="name">@((context2 as Gender).Name)</span>
+                    </ValueTemplate>
+
+                </DropDownListTemplates>
+            </SfDropDownList>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfTextBox ID="Email" @bind-Value="@(employee.Email)" FloatLabelType="FloatLabelType.Always" Placeholder="E-mail"></SfTextBox>
+        </div>
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfMaskedTextBox Placeholder="@Localizer.GetText("Phone")" ID="MobileNo" @bind-Value="@(employee.MobileNo)" FloatLabelType="FloatLabelType.Always" Mask="(+00) 000-000-000"></SfMaskedTextBox>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfCheckBox ID="Active" Label="@Localizer.GetText("ActiveQ")" @bind-Checked="@(employee.Active)"></SfCheckBox>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDropDownList TValue="string" @bind-Value="@(employee.HolidayCountry)" TItem="string" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("State")" DataSource="@_country">
+                <DropDownListEvents ValueChange="CountryChange" TValue="string"></DropDownListEvents>
+                <DropDownListFieldSettings Text="HolidayCountry" Value="HolidayCountry"></DropDownListFieldSettings>
+            </SfDropDownList>
+        </div>
+        <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+            <SfDropDownList TValue="string" @ref="CountryState" @bind-Value="@(employee.HolidayCountryState)" TItem="string" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Region")" DataSource="@_countrystate">
+                <DropDownListEvents TValue="string"></DropDownListEvents>
+                <DropDownListFieldSettings Text="HolidayCountryState" Value="HolidayCountryState"></DropDownListFieldSettings>
+            </SfDropDownList>
+        </div>
+    </div>
+    <div class="form-row" style="clear:both !important;">
+        <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+            <SfMultiSelect @ref="RolesSelect" @bind-value="@(employee.RolesID)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Permissions")" TValue="int[]" ModelType="@roles_models" Mode="@VisualMode.Box" DataSource="@_roles">
+                <MultiSelectEvents TValue="int[]" Created="Created"></MultiSelectEvents>
+                <MultiSelectTemplates>
+                    <ItemTemplate Context="context_2">
+                        @((context_2 as MappedRoles).Name)
+                    </ItemTemplate>
+                    <ValueTemplate Context="context_2">
+                        @((context_2 as MappedRoles).Name)
+                    </ValueTemplate>
+                    <HeaderTemplate Context="context_2">
+                        @Localizer.GetText("Permissions")
+                    </HeaderTemplate>
+                </MultiSelectTemplates>
+                <MultiSelectFieldSettings Text="RolesID" Value="RolesID"></MultiSelectFieldSettings>
+            </SfMultiSelect>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public MappedEmployee employee { get; set; }
+
+    [Parameter]
+    public List<Gender> _genders { get; set; }
+
+    [Parameter]
+    public List<string> _countrystate { get; set; }
+
+    [Parameter]
+    public List<string> _country { get; set; }
+
+    [Parameter]
+    public List<MappedRoles> _roles { get; set; }
+
+
+    private SfMultiSelect<int[]> RolesSelect;
+    public SfDropDownList<string, string> CountryState;
+    Type roles_models = typeof(MappedRoles);
+
+    protected async Task CountryChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        _countrystate = await HolidayApi.GetCountryStateListAsync(args.Value);
+    }
+
+    public void Created()
+    {
+        if (RolesSelect != null) RolesSelect.Refresh();
+        // if (MenuSelect != null) MenuSelect.Refresh();
+
+    }
+}
+
+<style>
+</style>

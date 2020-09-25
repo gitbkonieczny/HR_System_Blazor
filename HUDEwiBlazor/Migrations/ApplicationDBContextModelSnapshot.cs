@@ -613,6 +613,28 @@ namespace HUDEwiBlazor.Migrations
                     b.ToTable("LinkProjectDepartment");
                 });
 
+            modelBuilder.Entity("HUDEwiBlazor.Data.Models.LinkRolesMenuItem", b =>
+                {
+                    b.Property<int?>("LinkRolesMenuItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("MenuItemID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoleID")
+                        .HasColumnType("int");
+
+                    b.HasKey("LinkRolesMenuItemID");
+
+                    b.HasIndex("MenuItemID");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("LinkRolesMenuItem");
+                });
+
             modelBuilder.Entity("HUDEwiBlazor.Data.Models.LinkTeamsEmployee", b =>
                 {
                     b.Property<int?>("PLinkTeamsEmployee")
@@ -635,6 +657,35 @@ namespace HUDEwiBlazor.Migrations
                     b.HasIndex("TeamId", "EmployeeID");
 
                     b.ToTable("LinkTeamsEmployee");
+                });
+
+            modelBuilder.Entity("HUDEwiBlazor.Data.Models.MenuItem", b =>
+                {
+                    b.Property<int>("MenuItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IconCss")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Invisible")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MenuItemId");
+
+                    b.HasIndex("ParentID");
+
+                    b.ToTable("MenuItem");
                 });
 
             modelBuilder.Entity("HUDEwiBlazor.Data.Models.Messages", b =>
@@ -1293,6 +1344,19 @@ namespace HUDEwiBlazor.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
+            modelBuilder.Entity("HUDEwiBlazor.Data.Models.LinkRolesMenuItem", b =>
+                {
+                    b.HasOne("HUDEwiBlazor.Data.Models.MenuItem", "MenuItem")
+                        .WithMany("LinkRolesMenuItem")
+                        .HasForeignKey("MenuItemID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HUDEwiBlazor.Data.Models.Roles", "Role")
+                        .WithMany("LinkRolesMenuItem")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
             modelBuilder.Entity("HUDEwiBlazor.Data.Models.LinkTeamsEmployee", b =>
                 {
                     b.HasOne("HUDEwiBlazor.Data.Models.Employee", "Employee")
@@ -1302,6 +1366,14 @@ namespace HUDEwiBlazor.Migrations
                     b.HasOne("HUDEwiBlazor.Data.Models.Teams", "Teams")
                         .WithMany("LinkTeamsEmployee")
                         .HasForeignKey("TeamId");
+                });
+
+            modelBuilder.Entity("HUDEwiBlazor.Data.Models.MenuItem", b =>
+                {
+                    b.HasOne("HUDEwiBlazor.Data.Models.MenuItem", "Parent")
+                        .WithMany("Items")
+                        .HasForeignKey("ParentID")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("HUDEwiBlazor.Data.Models.Messages", b =>

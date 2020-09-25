@@ -1,13 +1,16 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif, "-apple-system", "BlinkMacSystemFont";
 }
 
 a, .btn-link {
     color: #0366d6;
 }
-
+.e-toast-container .e-toast .e-toast-message .e-toast-title{
+    color : black !important;
+}
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;

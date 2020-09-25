@@ -61,11 +61,74 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Change of presence.
+        /// </summary>
+        public static string AbsenceChange {
+            get {
+                return ResourceManager.GetString("AbsenceChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Absence List.
+        /// </summary>
+        public static string AbsenceList {
+            get {
+                return ResourceManager.GetString("AbsenceList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Holidays / absences.
+        /// </summary>
+        public static string Absences {
+            get {
+                return ResourceManager.GetString("Absences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Account.
+        /// </summary>
+        public static string Account {
+            get {
+                return ResourceManager.GetString("Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu New account in the HUD Ewi system.
+        /// </summary>
+        public static string AccountCreateSubject {
+            get {
+                return ResourceManager.GetString("AccountCreateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Acknowledge presence.
         /// </summary>
         public static string Acknowledge_presence {
             get {
                 return ResourceManager.GetString("Acknowledge_presence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Congratulations &lt;br&gt; Address: &lt;a href=&quot;{0}&quot;&gt;{0}&lt;/a&gt;&lt;br&gt; Your username: {1} &lt;br&gt; Your password: {2}.
+        /// </summary>
+        public static string AcountCreateContent {
+            get {
+                return ResourceManager.GetString("AcountCreateContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Is it active?.
+        /// </summary>
+        public static string ActiveQ {
+            get {
+                return ResourceManager.GetString("ActiveQ", resourceCulture);
             }
         }
         
@@ -111,6 +174,15 @@ namespace HUDEwiBlazor.Resources {
         public static string BackToLogin {
             get {
                 return ResourceManager.GetString("BackToLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Date of birth.
+        /// </summary>
+        public static string BirthDate {
+            get {
+                return ResourceManager.GetString("BirthDate", resourceCulture);
             }
         }
         
@@ -192,6 +264,24 @@ namespace HUDEwiBlazor.Resources {
         public static string Chart_ZoomOut {
             get {
                 return ResourceManager.GetString("Chart_ZoomOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Children of employees.
+        /// </summary>
+        public static string Children {
+            get {
+                return ResourceManager.GetString("Children", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Customers.
+        /// </summary>
+        public static string Clients {
+            get {
+                return ResourceManager.GetString("Clients", resourceCulture);
             }
         }
         
@@ -390,6 +480,33 @@ namespace HUDEwiBlazor.Resources {
         public static string DayLimit {
             get {
                 return ResourceManager.GetString("DayLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Database error.
+        /// </summary>
+        public static string DBError {
+            get {
+                return ResourceManager.GetString("DBError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Departments.
+        /// </summary>
+        public static string Departments {
+            get {
+                return ResourceManager.GetString("Departments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
@@ -4471,6 +4588,15 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Documents.
+        /// </summary>
+        public static string Documents {
+            get {
+                return ResourceManager.GetString("Documents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu The Request Failed.
         /// </summary>
         public static string DropDownList_ActionFailureTemplate {
@@ -4489,11 +4615,47 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edit record.
+        /// </summary>
+        public static string Edit_record {
+            get {
+                return ResourceManager.GetString("Edit_record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu The e-mail address provided already exists.
+        /// </summary>
+        public static string EmailAlreadyExist {
+            get {
+                return ResourceManager.GetString("EmailAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu This e-mail address does not exist in HuDEwi!.
         /// </summary>
         public static string EmailNotExist {
             get {
                 return ResourceManager.GetString("EmailNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Please enter a valid email address.
+        /// </summary>
+        public static string EmailValid {
+            get {
+                return ResourceManager.GetString("EmailValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Workers.
+        /// </summary>
+        public static string Employee {
+            get {
+                return ResourceManager.GetString("Employee", resourceCulture);
             }
         }
         
@@ -5290,6 +5452,51 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu First name and last name.
+        /// </summary>
+        public static string FirstLastName {
+            get {
+                return ResourceManager.GetString("FirstLastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu FirstName.
+        /// </summary>
+        public static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Forms.
+        /// </summary>
+        public static string Forms {
+            get {
+                return ResourceManager.GetString("Forms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Number of vacation days:.
+        /// </summary>
+        public static string FreeHoliday {
+            get {
+                return ResourceManager.GetString("FreeHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Number of vacation days on request:.
+        /// </summary>
+        public static string FreeHolidayOnDemand {
+            get {
+                return ResourceManager.GetString("FreeHolidayOnDemand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Future date cannot be confirmed!.
         /// </summary>
         public static string FutureConfirm {
@@ -6006,6 +6213,24 @@ namespace HUDEwiBlazor.Resources {
         public static string Gantt_ZoomToFit {
             get {
                 return ResourceManager.GetString("Gantt_ZoomToFit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Man.
+        /// </summary>
+        public static string GenderMan {
+            get {
+                return ResourceManager.GetString("GenderMan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Woman.
+        /// </summary>
+        public static string GenderWoman {
+            get {
+                return ResourceManager.GetString("GenderWoman", resourceCulture);
             }
         }
         
@@ -6820,6 +7045,96 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Acceptance of holidays.
+        /// </summary>
+        public static string HolidayAccept {
+            get {
+                return ResourceManager.GetString("HolidayAccept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Vacation Report.
+        /// </summary>
+        public static string HolidayReport {
+            get {
+                return ResourceManager.GetString("HolidayReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Holidays:.
+        /// </summary>
+        public static string Holidays {
+            get {
+                return ResourceManager.GetString("Holidays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Leave days left:.
+        /// </summary>
+        public static string HolidaysLeft {
+            get {
+                return ResourceManager.GetString("HolidaysLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Left on request this year:.
+        /// </summary>
+        public static string HolidaysOnDemandLeft {
+            get {
+                return ResourceManager.GetString("HolidaysOnDemandLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Number of vacation days per year:.
+        /// </summary>
+        public static string HolidaysPerYear {
+            get {
+                return ResourceManager.GetString("HolidaysPerYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Confirmed vacation in the current year:.
+        /// </summary>
+        public static string HolidaysPerYearConfirmed {
+            get {
+                return ResourceManager.GetString("HolidaysPerYearConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Holidays in the year:.
+        /// </summary>
+        public static string HolidayYear {
+            get {
+                return ResourceManager.GetString("HolidayYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Home Site.
+        /// </summary>
+        public static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Information board.
+        /// </summary>
+        public static string InfoBoard {
+            get {
+                return ResourceManager.GetString("InfoBoard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Cancel.
         /// </summary>
         public static string InPlaceEditor_Cancel {
@@ -7198,6 +7513,15 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 3 characters minimum..
+        /// </summary>
+        public static string MinThree {
+            get {
+                return ResourceManager.GetString("MinThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Download the mobile app.
         /// </summary>
         public static string MobileDownload {
@@ -7212,6 +7536,15 @@ namespace HUDEwiBlazor.Resources {
         public static string MonthClosed {
             get {
                 return ResourceManager.GetString("MonthClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Monthly report.
+        /// </summary>
+        public static string MonthReport {
+            get {
+                return ResourceManager.GetString("MonthReport", resourceCulture);
             }
         }
         
@@ -7270,6 +7603,24 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu New record.
+        /// </summary>
+        public static string New_record {
+            get {
+                return ResourceManager.GetString("New_record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your Worksheet does not exist! Please contact the administrator..
         /// </summary>
         public static string NotExistWorkCard {
@@ -7293,6 +7644,78 @@ namespace HUDEwiBlazor.Resources {
         public static string NumericTextBox_IncrementTitle {
             get {
                 return ResourceManager.GetString("NumericTextBox_IncrementTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu The operation was successful.
+        /// </summary>
+        public static string OperationSuccess {
+            get {
+                return ResourceManager.GetString("OperationSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Organizational structure.
+        /// </summary>
+        public static string OrgStructure {
+            get {
+                return ResourceManager.GetString("OrgStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Categories.
+        /// </summary>
+        public static string OverTimeCategories {
+            get {
+                return ResourceManager.GetString("OverTimeCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu List.
+        /// </summary>
+        public static string OverTimeList {
+            get {
+                return ResourceManager.GetString("OverTimeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Overtime.
+        /// </summary>
+        public static string OverTimes {
+            get {
+                return ResourceManager.GetString("OverTimes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Overtime of employees.
+        /// </summary>
+        public static string OverTimesAdmin {
+            get {
+                return ResourceManager.GetString("OverTimesAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Statement 1.
+        /// </summary>
+        public static string Overview1 {
+            get {
+                return ResourceManager.GetString("Overview1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Statement 2.
+        /// </summary>
+        public static string Overview2 {
+            get {
+                return ResourceManager.GetString("Overview2", resourceCulture);
             }
         }
         
@@ -8697,6 +9120,33 @@ namespace HUDEwiBlazor.Resources {
         public static string PdfViewer_ZoomOutText {
             get {
                 return ResourceManager.GetString("PdfViewer_ZoomOutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Permissions.
+        /// </summary>
+        public static string Permissions {
+            get {
+                return ResourceManager.GetString("Permissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Personal number.
+        /// </summary>
+        public static string PersonalNumber {
+            get {
+                return ResourceManager.GetString("PersonalNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Phone.
+        /// </summary>
+        public static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
             }
         }
         
@@ -12274,6 +12724,33 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Presence Management.
+        /// </summary>
+        public static string Presence {
+            get {
+                return ResourceManager.GetString("Presence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu User profile.
+        /// </summary>
+        public static string Profil {
+            get {
+                return ResourceManager.GetString("Profil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Projects.
+        /// </summary>
+        public static string Projects {
+            get {
+                return ResourceManager.GetString("Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add Condition.
         /// </summary>
         public static string QueryBuilder_AddCondition {
@@ -12873,6 +13350,24 @@ namespace HUDEwiBlazor.Resources {
         public static string RecurrenceEditor_Years {
             get {
                 return ResourceManager.GetString("RecurrenceEditor_Years", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Region.
+        /// </summary>
+        public static string Region {
+            get {
+                return ResourceManager.GetString("Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Reports.
+        /// </summary>
+        public static string Reports {
+            get {
+                return ResourceManager.GetString("Reports", resourceCulture);
             }
         }
         
@@ -14029,6 +14524,24 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Roles.
+        /// </summary>
+        public static string Roles {
+            get {
+                return ResourceManager.GetString("Roles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Employee schedule.
+        /// </summary>
+        public static string Schedule {
+            get {
+                return ResourceManager.GetString("Schedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add title.
         /// </summary>
         public static string Schedule_AddTitle {
@@ -14695,11 +15208,56 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu System settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Sex.
+        /// </summary>
+        public static string Sex {
+            get {
+                return ResourceManager.GetString("Sex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Shifts.
+        /// </summary>
+        public static string Shifts {
+            get {
+                return ResourceManager.GetString("Shifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Shortcut.
+        /// </summary>
+        public static string Shortcut {
+            get {
+                return ResourceManager.GetString("Shortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Sign In.
         /// </summary>
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Sites.
+        /// </summary>
+        public static string Sites {
+            get {
+                return ResourceManager.GetString("Sites", resourceCulture);
             }
         }
         
@@ -14722,11 +15280,38 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu State.
+        /// </summary>
+        public static string State {
+            get {
+                return ResourceManager.GetString("State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Surname.
+        /// </summary>
+        public static string Surname {
+            get {
+                return ResourceManager.GetString("Surname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Close.
         /// </summary>
         public static string Tab_CloseButtonTitle {
             get {
                 return ResourceManager.GetString("Tab_CloseButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Teams.
+        /// </summary>
+        public static string Teams {
+            get {
+                return ResourceManager.GetString("Teams", resourceCulture);
             }
         }
         
@@ -14947,6 +15532,24 @@ namespace HUDEwiBlazor.Resources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Holiday used in the current year to date:.
+        /// </summary>
+        public static string UsedHolidaysToDate {
+            get {
+                return ResourceManager.GetString("UsedHolidaysToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Users.
+        /// </summary>
+        public static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Vacation leave.
         /// </summary>
         public static string Vacation_Leave {
@@ -14970,6 +15573,24 @@ namespace HUDEwiBlazor.Resources {
         public static string Work_Schedule {
             get {
                 return ResourceManager.GetString("Work_Schedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Work card.
+        /// </summary>
+        public static string WorkCard {
+            get {
+                return ResourceManager.GetString("WorkCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Employee work cards.
+        /// </summary>
+        public static string WorkCardAdmin {
+            get {
+                return ResourceManager.GetString("WorkCardAdmin", resourceCulture);
             }
         }
         

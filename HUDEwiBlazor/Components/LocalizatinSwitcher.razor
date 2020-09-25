@@ -27,7 +27,7 @@
         }
         StateHasChanged();
     }
-    private async Task OnSelected(ChangeEventArgs e)
+    private async Task OnSelected(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         var culture = (string)e.Value;
         var uri = new Uri(NavigationManager.Uri)

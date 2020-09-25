@@ -47,15 +47,24 @@
     line-height: 12px;
     overflow-wrap: break-word;
     text-overflow: clip;
-    white-space: pre-wrap !important;
     word-wrap: break-word;
     font-size: 10px !important;
     margin: 0 0 0 0 !important;
 }
 
+.e-multi-select-list-wrapper{
+}
+.padding-top-multiselect {
+    padding-bottom: 55px;
+}
+
+.control-wrapper {
+    margin: 0 auto;
+    width: 200px;
+}
+
 #Grid .e-btn{
     font-size: 10px !important;
-    height:20px !important;
 }
 
 #Grid .e-rowcell {

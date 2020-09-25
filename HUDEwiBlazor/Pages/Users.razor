@@ -1,0 +1,277 @@
+﻿@page "/users"
+@layout SiteLayout
+@inject ISyncfusionStringLocalizer  Localizer
+@inject ISecurity  Security
+@inject IHolidayApiService HolidayApi
+@inject IMapper _mapper
+<div class="limiter">
+    <div id="Title">
+        @Localizer.GetText("Users")
+    </div>
+    <SfToast ID="toast_default" @ref="ToastObj" TimeOut="5000" Icon="e-meeting">
+        <ToastPosition X="Center"></ToastPosition>
+    </SfToast>
+    
+    <SfGrid  ID="Grid" @ref="Grid" DataSource="@_users" AllowPaging="true" AllowTextWrap="true" Toolbar="@(new string[] {"Add","Edit","Delete","Search"})">
+        <GridEvents OnActionComplete="ActionCompleteHandler" TValue="MappedEmployee"></GridEvents>
+        <GridPageSettings PageSize="15"></GridPageSettings>
+        <GridEditSettings  @ref="TemplateRef"  ShowDeleteConfirmDialog="true" AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog" Dialog="DialogParams">
+            <HeaderTemplate>
+                @{
+                    <span>@Title</span>
+                }
+            </HeaderTemplate>
+            <Template>
+                @{
+                    var employee = (context as MappedEmployee);
+                }
+                <UsersTemplate employee="@employee" _country="@_country" _countrystate="@_countrystate" _genders="@_genders" _roles="@_roles"></UsersTemplate>
+            </Template>
+        </GridEditSettings>
+        <GridTemplates>
+            <DetailTemplate>
+                @{
+                    var employee = (context as MappedEmployee);
+                    <table class="detailtable" width="100%">
+                        <colgroup>
+                            <col width="35%" />
+                            <col width="35%" />
+                            <col width="30%" />
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td rowspan="6" style="text-align: center;">
+                                    <img class="photo" src="data:image/jpg;base64, @employee.Avatar64" alt="@employee.EmployeeID" />
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("FirstName"): </b></span> @employee.Name
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("PersonalNumber"):</b></span> @employee.PersonalNumber
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Surname"):</b> </span> @employee.Surname
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Shortcut"):</b></span> @employee.ShortCut
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("BirthDate"):</b></span> @employee.BirthDateFormated
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Phone"):</b></span> @String.Format("{0:(###) ###-####}", employee.MobileNo);
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-weight: 500;"><b>E-mail:</b></span> @employee.Email
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Permissions"):</b></span> @employee.Roles
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Sex"):</b></span> @employee.GenderName
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("Region"):</b></span> @employee.HolidayCountryState
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-weight: 500;"><b>@Localizer.GetText("State"):</b></span> @employee.HolidayCountry
+                                </td>
+                                <td>
+                                    <span style="font-weight: 500;"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </DetailTemplate>
+        </GridTemplates>
+        <GridColumns>
+            <GridColumn Field="EmployeeID"  HeaderText="ID" IsPrimaryKey="true" Visible="false"></GridColumn>
+            <GridColumn Field="Name" ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"   HeaderText="@Localizer.GetText("FirstName")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Surname" ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"  HeaderText="@Localizer.GetText("Surname")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="PersonalNumber" ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"  HeaderText="@Localizer.GetText("PersonalNumber")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="ShortCut" ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"  HeaderText="@Localizer.GetText("Shortcut")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="BirthDate" ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"  Type="ColumnType.Date" HeaderText="@Localizer.GetText("BirthDate")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="BirthDateFormated" HeaderText="@Localizer.GetText("BirthDate")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="GenderName" HeaderText="@Localizer.GetText("Sex")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Gender"  ValidationRules="@(new ValidationRules{ Required=true, Messages=message })"  HeaderText="@Localizer.GetText("Sex")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Email" ValidationRules="@(new ValidationRules{ Required=true, Email=true, Messages=message })"  HeaderText="E-mail" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="MobileNo" HeaderText="@Localizer.GetText("Phone")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Roles" HeaderText="@Localizer.GetText("Permissions")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Active" HeaderText="@Localizer.GetText("ActiveQ")" DisplayAsCheckBox="true" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="HolidayCountry" HeaderText="@Localizer.GetText("State")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="HolidayCountryState" HeaderText="@Localizer.GetText("Region")" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="ProjectsNames" HeaderText="@Localizer.GetText("Projects")" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Avatar64" HeaderText="Avatar" Visible="false" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="RolesID" Visible="false"></GridColumn>
+
+        </GridColumns>
+    </SfGrid>
+</div>
+<Document Title="@Localizer.GetText("Users")" />
+
+
+@code{
+    protected SfToast ToastObj;
+    public SfDropDownList<string,string> CountryState;
+    protected Syncfusion.Blazor.Grids.GridEditSettings TemplateRef;
+    protected SfGrid<MappedEmployee> Grid;
+    protected List<Gender> _genders;
+    protected List<string> _country;
+    protected List<string> _countrystate = new List<string>();
+    protected List<MappedRoles> _roles;
+
+
+    Type roles_models = typeof(MappedRoles);
+
+    private SfMultiSelect<int[]> RolesSelect;
+
+    private Boolean Check = false;
+    private DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "450px" };
+    private string Title;
+    protected List<MappedEmployee> _users = new List<MappedEmployee>();
+
+    private Boolean torefresh = false;
+    IDictionary<string, object> message;
+    protected override async Task OnInitializedAsync()
+    {
+        message = new Dictionary<string, object>() { { "required", Localizer.GetText("QueryBuilder_ValidationMessage") }, { "email", Localizer.GetText("EmailValid") } };
+        _genders = Security.GetAllGenders();
+        _users = _mapper.Map<List<MappedEmployee>>(await Security.GetAllUsers());
+        _country = await HolidayApi.GetCountryList();
+        _roles = _mapper.Map<List<MappedRoles>>(await Security.GetRolesAsync());
+    }
+
+    protected async Task ActionCompleteHandler(ActionEventArgs<MappedEmployee> args)
+    {
+        if (args.RequestType.ToString() == "Add")
+        {
+            Title = Localizer.GetText("New_record");
+            args.Data.BirthDate = DateTime.Now;
+            args.Data.Gender = 0;
+            args.Data.HolidayCountry = "PL";
+            _countrystate = await HolidayApi.GetCountryStateListAsync(args.Data.HolidayCountry);
+            args.Data.HolidayCountryState = _countrystate.First();
+
+        }
+        if (args.RequestType.ToString() == "BeginEdit")
+        {
+            Title = Localizer.GetText("Edit_record") + " " + args.Data.EmployeeID.ToString();
+            _countrystate = await HolidayApi.GetCountryStateListAsync(args.Data.HolidayCountry);
+        }
+
+        if (args.Action == "Add")
+        {
+            if (args.RequestType.ToString() == "Save")
+            {
+                var response = await Security.AddEmployee(_mapper.Map<Employee>(args.Data));
+
+                if (response.Item1 != "OK")
+                {
+                    ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                    ToastObj.Show();
+                    torefresh = true;
+                    Grid.Refresh();
+                    StateHasChanged();
+                    return;
+                }
+                else
+                {
+
+                    ToastObj.Title = Localizer.GetText("OperationSuccess");
+                    ToastObj.Show();
+                }
+            }
+        }
+
+        if (args.Action == "Edit")
+        {
+            if (args.RequestType.ToString() == "Save")
+            {
+                var response = await Security.UpdateEmployee(_mapper.Map<Employee>(args.Data));
+                if (response.Item1 != "OK")
+                {
+                    ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                    ToastObj.Show();
+                    torefresh = true;
+                    Grid.Refresh();
+                    StateHasChanged();
+                    return;
+                }
+                else
+                {
+
+                    ToastObj.Title = Localizer.GetText("OperationSuccess");
+                    ToastObj.Show();
+                }
+
+            }
+        }
+
+        if (args.RequestType.ToString() == "Delete")
+        {
+
+            var response = await Security.DeleteEmployee(_mapper.Map<Employee>(args.Data));
+            if (response.Item1 != "OK")
+            {
+                ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                ToastObj.Show();
+                torefresh = true;
+                Grid.Refresh();
+                StateHasChanged();
+                return;
+            }
+            else
+            {
+                ToastObj.Title = Localizer.GetText("OperationSuccess");
+                ToastObj.Show();
+            }
+
+        }
+        if (args.RequestType.ToString() == "Refresh" && torefresh==true)
+        {
+            torefresh = false;
+            _users = _mapper.Map<List<MappedEmployee>>(await Security.GetAllUsers());
+        }
+        StateHasChanged();
+    }
+
+
+
+
+
+
+}
+
+<style type="text/css" class="cssStyles">
+    .detailtable td {
+        font-size: 13px;
+        padding: 4px;
+        max-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .photo {
+        border-radius: 20px;
+        max-width: 180px;
+        max-height: 240px;
+        border-radius: 50px;
+        box-shadow: inset 0 0 1px #e0e0e0, inset 0 0 14px rgba(0, 0, 0, 0.2);
+    }
+    .name{
+        padding-left:10px;
+        vertical-align:middle;
+    }
+</style>

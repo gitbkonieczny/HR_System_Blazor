@@ -16,16 +16,31 @@ using HUDEwiBlazor.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using HUDEwiBlazor.Data.Models;
+using System.Reflection.Metadata.Ecma335;
+using System.Collections.Immutable;
+using shortid;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Components;
 
 namespace HUDEwiBlazor.Classes
 {
     public class Security:ISecurity
     {
         private readonly ApplicationDBContext _context;
-
-        public Security(ApplicationDBContext context)
+        private Syncfusion.Blazor.ISyncfusionStringLocalizer _localizer;
+        private IOrganizationService _organizationService;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private IEmailService _emailService;
+        private NavigationManager _navigationManager;
+        public Security(ApplicationDBContext context, NavigationManager navigationManager ,IEmailService emailService, Syncfusion.Blazor.ISyncfusionStringLocalizer localizer, IOrganizationService organizationService, IWebHostEnvironment hostingEnvironment)
         {
-            this._context = context;
+            _organizationService = organizationService;
+            _navigationManager = navigationManager;
+            _emailService = emailService;
+            _localizer = localizer;
+            _hostingEnvironment = hostingEnvironment;
+            _context = context;
         }
         public async Task<(bool, string)> Authenticate (string email, string password)
         {
@@ -184,6 +199,22 @@ namespace HUDEwiBlazor.Classes
             }
             return true;
         }
+        public async Task<bool> ChangePasswordforGuid(string password, string guid)
+        {
+            try
+            {
+                var employee = await _context.Employees.Where(x => x.GUID == guid).FirstOrDefaultAsync();
+                var salt = await GetSalt(employee.Email);
+                employee.Password = PasswordHash(password, salt);
+                _context.Employees.Update(employee);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
         public async Task<bool> CheckLinkExist(string link)
         {
             try
@@ -231,6 +262,544 @@ namespace HUDEwiBlazor.Classes
             _context.PasswordLink.Add(p_link);
             await _context.SaveChangesAsync();
             return p_link;
+        }
+
+        public async Task<List<Roles>> GetRolesForEmployee(Employee employee)
+        {
+            var ids = new List<Roles>();
+            var linkemploye = await _context.LinkEmployeRoles
+                .Include(x => x.Roles)
+                .ThenInclude(x=>x.LinkRolesMenuItem)
+                .Where(x => x.EmployeeID == employee.EmployeeID).ToListAsync();
+
+            foreach (var item in linkemploye)
+            {
+                ids.Add(item.Roles);
+            }
+            return ids;
+        }
+
+        public async Task<List<Roles>> GetRolesAsync()
+        {
+            var roles = await _context.Roles
+                .Include(x => x.LinkEmployeRoles)
+                    .ThenInclude(x => x.Employee)
+                .Include(x => x.LinkRolesMenuItem)
+                    .ThenInclude(x=>x.MenuItem)
+                .ToListAsync();
+
+            foreach (var role in roles)
+            {
+                if (role.LinkEmployeRoles.ToList().Count()!=0)
+                {
+                    role.Users = String.Join(", ", role.LinkEmployeRoles.ToList().Select(x => x.Employee.Name + " " + x.Employee.Surname));
+                    role.UsersID = role.LinkEmployeRoles.Where(x=>x.EmployeeID != null).Select(x => (int)x.EmployeeID).ToArray();
+                    role.MenusID = role.LinkRolesMenuItem.Where(x => x.MenuItemID != null).Select(x => (int)x.MenuItemID).ToArray();
+                }
+            }
+            return roles;
+        }
+
+        public  List<Roles> GetRoles()
+        {
+            var roles =  _context.Roles
+                .Include(x => x.LinkEmployeRoles)
+                    .ThenInclude(x => x.Employee)
+                .Include(x => x.LinkRolesMenuItem)
+                    .ThenInclude(x => x.MenuItem)
+                .ToList();
+
+            foreach (var role in roles)
+            {
+                if (role.LinkEmployeRoles.ToList().Count() != 0)
+                {
+                    role.Users = String.Join(", ", role.LinkEmployeRoles.ToList().Select(x => x.Employee.Name + " " + x.Employee.Surname));
+                    role.UsersID = role.LinkEmployeRoles.Where(x => x.EmployeeID != null).Select(x => (int)x.EmployeeID).ToArray();
+                    role.MenusID = role.LinkRolesMenuItem.Where(x => x.MenuItemID != null).Select(x => (int)x.MenuItemID).ToArray();
+                }
+            }
+            return roles;
+        }
+        public Roles GetRole(int roleid)
+        {
+            var role = _context.Roles
+                .Include(x => x.LinkEmployeRoles)
+                    .ThenInclude(x => x.Employee)
+                .Include(x => x.LinkRolesMenuItem)
+                    .ThenInclude(x => x.MenuItem).Where(x => x.RolesID == roleid).FirstOrDefault();
+
+
+            if (role != null)
+            {
+                if (role.LinkEmployeRoles.ToList().Count() != 0)
+                {
+                    role.Users = String.Join(", ", role.LinkEmployeRoles.ToList().Select(x => x.Employee.Name + " " + x.Employee.Surname));
+                    role.UsersID = role.LinkEmployeRoles.Where(x => x.EmployeeID != null).Select(x => (int)x.EmployeeID).ToArray();
+                    role.MenusID = role.LinkRolesMenuItem.Where(x => x.MenuItemID != null).Select(x => (int)x.MenuItemID).ToArray();
+                }
+            }
+            return role;
+        }
+        public List<Employee> GetEmployees()
+        {
+            var employee =  _context.Employees.ToList(); 
+            return employee;
+        }
+        public async Task<List<Employee>> GetEmployeesAsync()
+        {
+            var employee = await _context.Employees.ToListAsync();
+            return employee;
+        }
+        public List<MenuItem> GetMenuItems()
+        {
+            var menu = _context.MenuItem.ToList();
+            return menu;
+        }
+        public async Task<List<MenuItem>> GetMenuItemsAsync()
+        {
+            var menu = await _context.MenuItem.ToListAsync();
+            return menu;
+        }
+        public async Task<Employee> GetEmployee(string guid)
+        {
+            var employee = await _context.Employees.Include(x => x.LinkEmployeRoles).ThenInclude(x => x.Roles).Where(x => x.GUID == guid).FirstOrDefaultAsync();
+            if (employee.Gender != null)
+            {
+                employee.GenderName = GetAllGenders().Where(x => x.Value == employee.Gender).FirstOrDefault().Name;
+            }
+            if (employee.LinkEmployeRoles != null)
+            {
+                var roles = await GetRolesForEmployee(employee);
+                if (roles.Count() != 0)
+                {
+                    employee.Roles = String.Join(", ", roles.Select(x => x.Name));
+                    employee.RolesID = roles.Select(x => (int)x.RolesID).ToArray();
+                }
+            }
+            var user_projects = await _organizationService.GetProjectsForEmployee(employee);
+            if (user_projects.Count() != 0)
+            {
+                employee.ProjectsNames = string.Join(Environment.NewLine, user_projects.Select(x => x.Name));
+            }
+            if (employee.BirthDate.HasValue)
+            {
+                employee.BirthDateFormated = employee.BirthDate.Value.ToString("dd-MM-yyyy");
+            }
+            return employee;
+        }
+        public async Task<Employee> GetEmployee(int id)
+        {
+            var employee = await _context.Employees.Include(x => x.LinkEmployeRoles).ThenInclude(x => x.Roles).Where(x => x.EmployeeID == id).FirstOrDefaultAsync();
+            if (employee.Gender != null)
+            {
+                employee.GenderName = GetAllGenders().Where(x => x.Value == employee.Gender).FirstOrDefault().Name;
+            }
+            if (employee.LinkEmployeRoles != null)
+            {
+                var roles = await GetRolesForEmployee(employee);
+                if (roles.Count() != 0)
+                {
+                    employee.Roles = String.Join(", ", roles.Select(x => x.Name));
+                    employee.RolesID = roles.Select(x => (int)x.RolesID).ToArray();
+                }
+            }
+            var user_projects = await _organizationService.GetProjectsForEmployee(employee);
+            if (user_projects.Count() != 0)
+            {
+                employee.ProjectsNames = string.Join(Environment.NewLine, user_projects.Select(x => x.Name));
+            }
+            if (employee.BirthDate.HasValue)
+            {
+                employee.BirthDateFormated = employee.BirthDate.Value.ToString("dd-MM-yyyy");
+            }
+            return employee;
+        }
+        public async Task<(string, string, Employee)> AddEmployee(Employee employee)
+        {
+            try
+            {
+                var email =await _context.Employees.Select(x => x.Email).Where(x => x.ToLower() == employee.Email.ToLower()).ToListAsync();
+                if (email.Count() == 0)
+                {
+                    employee.Email = employee.Email.ToLower();
+                    string password = GenerateRandomPassword();
+                    shortid.Configuration.GenerationOptions options = new shortid.Configuration.GenerationOptions();
+                    options.UseNumbers = false;
+                    options.UseSpecialCharacters = false;
+                    options.Length = 14;
+                    string guid = ShortId.Generate(options);
+                    bool unique = true;
+                    do
+                    {
+                        var find = await _context.Employees.Select(x => x.GUID).Where(x => x == guid).FirstOrDefaultAsync();
+                        if (find == null)
+                        {
+                            unique = false;
+                        }
+                        else
+                        {
+                            guid = ShortId.Generate(options);
+                        }
+                    } while (unique);
+                    employee.GUID = guid;
+                    employee.Salt = SaltGenerate();
+                    employee.Password = PasswordHash(password, employee.Salt);
+                    string basePath = _hostingEnvironment.WebRootPath;
+                    FileStream fs = new FileStream(basePath + @"/images/noAvatar.png", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    employee.Avatar = Extensions.ReadFully(fs);
+                    if (employee.RolesID != null)
+                    {
+                        foreach (var item in employee.RolesID)
+                        {
+                            await AddEmployeeToRoles(item, new List<int>() { (int)employee.EmployeeID });
+                        }
+                    }
+                    _context.Employees.Add(employee);
+
+                    var EmailMessage = new EmailMessage();
+                    EmailMessage.FromAddresses.Add(new EmailAddress { Name = "H&D Ewi", Address = "Administracja@hud.pl" });
+                    EmailMessage.ToAddresses.Add(new EmailAddress { Name = employee.Name + " " + employee.Surname, Address = employee.Email });
+                    EmailMessage.Subject = _localizer.GetText("AccountCreateSubject");
+                    EmailMessage.Content = string.Format(_localizer.GetText("AcountCreateContent"), _navigationManager.BaseUri, employee.Email, password) + _localizer.GetText("MailFooter"); ;
+
+                    _emailService.Send(EmailMessage);
+
+                }
+                else
+                {
+                    return ("UserExistError", _localizer.GetText("EmailAlreadyExist"), await GetEmployee((int)employee.EmployeeID));
+                }
+
+                return ("OK", "", await GetEmployee((int)employee.EmployeeID));
+            }
+            catch (Exception e)
+            {
+
+                return ("DBError", e.Message, null);
+            }
+        }
+
+
+        public async Task<(string, string, Employee)> UpdateEmployee(Employee employee)
+        {
+            try
+            {
+                var email = await _context.Employees.Where(x => x.Email.ToLower() == employee.Email.ToLower() && x.EmployeeID != employee.EmployeeID).ToListAsync();
+                if (email.Count() == 0)
+                {
+                    var context_employee = await _context.Employees.Where(x => x.EmployeeID == employee.EmployeeID).FirstOrDefaultAsync();
+                    context_employee.Active = employee.Active;
+                    context_employee.BirthDate = employee.BirthDate;
+                    context_employee.Email = employee.Email;
+                    context_employee.Gender = employee.Gender;
+                    context_employee.HolidayCountry = employee.HolidayCountry;
+                    context_employee.HolidayCountryState = employee.HolidayCountryState;
+                    context_employee.MobileNo = employee.MobileNo;
+                    context_employee.Name = employee.Name;
+                    context_employee.PersonalNumber = employee.PersonalNumber;
+                    context_employee.ShortCut = employee.ShortCut;
+                    context_employee.Surname = employee.Surname;
+                    _context.Employees.Update(context_employee);
+                    await _context.SaveChangesAsync();
+                    if (employee.RolesID != null)
+                    {
+                        var result = await UpdateRolesForEmployee(employee.RolesID, (int) employee.EmployeeID);
+                        if (result.Item1 == "DBError")
+                        {
+                            return ("DBError", result.Item2, await GetEmployee((int)employee.EmployeeID));
+                        }
+                    }
+                }
+                else
+                {
+                    return ("UserExistError", _localizer.GetText("EmailAlreadyExist"), await GetEmployee((int)employee.EmployeeID));
+                }
+                    
+
+                return ("OK", "", await GetEmployee((int)employee.EmployeeID));
+            }
+            catch (Exception e)
+            {
+
+                return ("DBError", e.Message, null);
+            }
+        }
+
+        public async Task<(string, string)> DeleteEmployee(Employee employee)
+        {
+            try
+            {
+                var link_to_remove = _context.LinkEmployeRoles.Where(x => x.EmployeeID == employee.EmployeeID);
+                _context.LinkEmployeRoles.RemoveRange(link_to_remove);
+                var employee_to_remove = _context.Employees.Where(x => x.EmployeeID == employee.EmployeeID);
+                _context.Employees.RemoveRange(employee_to_remove);
+                await _context.SaveChangesAsync();
+                return ("OK", "");
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message);
+            }
+        }
+
+        public async Task<byte[]> SaveAvatar(int emp, byte[] file)
+        {
+            var employee = await _context.Employees.Where(x => x.EmployeeID == emp).FirstOrDefaultAsync();
+            employee.Avatar = file;
+            await _context.SaveChangesAsync();
+            return file;
+        }
+
+        public async Task<(string, string, Roles)> AddRole(Roles role)
+        {
+            try
+            {
+                _context.Roles.Add(role);
+                await _context.SaveChangesAsync();
+                if (role.UsersID != null)
+                {
+                    foreach (var item in role.UsersID)
+                    {
+                        _context.LinkEmployeRoles.Add(new LinkEmployeRoles { EmployeeID = item, RolesID = role.RolesID });
+                    }
+                }
+                if (role.MenusID != null)
+                {
+                    foreach (var item in role.MenusID)
+                    {
+                        _context.LinkRolesMenuItem.Add(new LinkRolesMenuItem { MenuItemID = item, RoleID = role.RolesID });
+                    }
+                }
+                
+                await _context.SaveChangesAsync();
+                return ("OK", "", GetRole((int)role.RolesID));
+            }
+            catch (Exception e)
+            {
+
+                return ("DBError", e.Message, null);
+            }
+        }
+        public async Task<(string, string, Employee)> UpdateRolesForEmployee(int[] Roles, int employeeid)
+        {
+            try
+            {
+                var data_to_change = new List<int>();
+                var actual_data = new List<int>();
+                var emp = await _context.Employees.Include(x => x.LinkEmployeRoles).Where(x => x.EmployeeID == employeeid).FirstOrDefaultAsync();
+                if (Roles != null)
+                {
+                    data_to_change = Roles.ToList();
+                }
+                if (emp.LinkEmployeRoles != null)
+                {
+                    actual_data = emp.LinkEmployeRoles.Select(x => (int)x.RolesID).ToList();
+                }
+                var remove_data = actual_data.Except(data_to_change).ToList(); //remove data
+                var to_remove = _context.LinkEmployeRoles.Where(x => remove_data.Contains((int)x.RolesID) && x.EmployeeID == emp.EmployeeID);
+                _context.LinkEmployeRoles.RemoveRange(to_remove);
+
+                var new_data = data_to_change.Except(actual_data).ToList(); //add new_data
+                foreach (var item in new_data)
+                {
+                    _context.LinkEmployeRoles.Add(new LinkEmployeRoles { EmployeeID = emp.EmployeeID, RolesID = item });
+                }
+                await _context.SaveChangesAsync();
+                return ("OK", "", await GetEmployee(emp.GUID));
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message, null);
+            }
+        }
+        public async Task<(string, string, Roles)> UpdateRole(Roles role)
+        {
+            try
+            {
+                var find_role = await _context.Roles.Where(x => x.RolesID == role.RolesID).FirstOrDefaultAsync();
+                find_role.Description = role.Description;
+                find_role.Name = role.Name;
+                _context.Roles.Update(find_role);
+
+                var data_to_change = new List<int>();
+                var actual_data = new List<int>();
+                if (role.UsersID != null)
+                {
+                    data_to_change = role.UsersID.ToList();
+                }
+                if (role.LinkEmployeRoles != null)
+                {
+                    actual_data = role.LinkEmployeRoles.Select(x => (int)x.EmployeeID).ToList();
+                }
+
+                var remove_data = actual_data.Except(data_to_change).ToList(); //remove data
+                var to_remove = _context.LinkEmployeRoles.Where(x => remove_data.Contains((int)x.EmployeeID) && x.RolesID == role.RolesID);
+                _context.LinkEmployeRoles.RemoveRange(to_remove);
+
+
+                var new_data = data_to_change.Except(actual_data).ToList(); //add new_data
+                foreach (var item in new_data)
+                {
+                    _context.LinkEmployeRoles.Add(new LinkEmployeRoles { EmployeeID = item, RolesID = role.RolesID });
+                }
+
+                var data_to_change_menus = new List<int>();
+                var actual_data_menus = new List<int>();
+
+                if (role.MenusID != null)
+                {
+                    data_to_change_menus = role.MenusID.ToList();
+                }
+                if (role.LinkRolesMenuItem != null)
+                {
+                    actual_data_menus = role.LinkRolesMenuItem.Select(x => (int)x.MenuItemID).ToList();
+                }
+
+                remove_data = actual_data_menus.Except(data_to_change_menus).ToList();
+                var to_remove_menu = _context.LinkRolesMenuItem.Where(x => remove_data.Contains((int)x.MenuItemID) && x.RoleID == role.RolesID);
+                _context.LinkRolesMenuItem.RemoveRange(to_remove_menu);
+                
+                new_data = data_to_change_menus.Except(actual_data_menus).ToList(); //add new_data
+                foreach (var item in new_data)
+                {
+                    _context.LinkRolesMenuItem.Add(new LinkRolesMenuItem { MenuItemID = item, RoleID = role.RolesID });
+                }
+
+                await _context.SaveChangesAsync();
+                return ("OK", "", GetRole((int)role.RolesID));
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message, GetRole((int)role.RolesID));
+            }
+        }
+        public async Task<(string, string)> DeleteRole(Roles role)
+        {
+            try
+            {
+                var link_to_remove = _context.LinkEmployeRoles.Where(x => x.RolesID == role.RolesID);
+                _context.LinkEmployeRoles.RemoveRange(link_to_remove);
+                var link_to_remove_menu = _context.LinkRolesMenuItem.Where(x => x.RoleID == role.RolesID);
+                _context.LinkRolesMenuItem.RemoveRange(link_to_remove_menu);
+                var role_to_remove = _context.Roles.Where(x => x.RolesID == role.RolesID);
+                _context.Roles.RemoveRange(role_to_remove);
+                await _context.SaveChangesAsync();
+                return ("OK", "");
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message);
+            }
+        }
+            public async Task<(string,string)> RemoveEmployeeFromRoles(int? RolesID, List<int> EmployeeList)
+        {
+            try
+            {
+                var to_remove = _context.LinkEmployeRoles.Where(x => EmployeeList.Contains((int)x.EmployeeID) && x.RolesID == RolesID);
+                _context.LinkEmployeRoles.RemoveRange(to_remove);
+                await _context.SaveChangesAsync();
+                return ("OK","");
+            }
+            catch (Exception e)
+            {
+                return ("DBError",e.Message);
+            }
+            
+        }
+
+        public async Task<(string, string)> AddEmployeeToRoles(int? RolesID, List<int> EmployeeList)
+        {
+            try
+            {
+                foreach (var item in EmployeeList)
+                {
+                    _context.LinkEmployeRoles.Add(new LinkEmployeRoles { EmployeeID = item, RolesID = RolesID });
+                }
+                
+                await _context.SaveChangesAsync();
+                return ("OK", "");
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message);
+            }
+
+        }
+
+        public async Task<(string, string)> RemoveMenuFromRoles(int? RolesID, List<int> MenuList)
+        {
+            try
+            {
+                var to_remove = _context.LinkRolesMenuItem.Where(x => MenuList.Contains((int)x.MenuItemID) && x.RoleID == RolesID);
+                _context.LinkRolesMenuItem.RemoveRange(to_remove);
+                await _context.SaveChangesAsync();
+                return ("OK", "");
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message);
+            }
+
+        }
+        public async Task<(string, string)> AddMenuToRoles(int? RolesID, List<int> MenuList)
+        {
+            try
+            {
+                foreach (var item in MenuList)
+                {
+                    _context.LinkRolesMenuItem.Add(new LinkRolesMenuItem { MenuItemID = item, RoleID = RolesID });
+                }
+
+                await _context.SaveChangesAsync();
+                return ("OK", "");
+            }
+            catch (Exception e)
+            {
+                return ("DBError", e.Message);
+            }
+
+        }
+        public List<Gender> GetAllGenders()
+        {
+
+            List<Gender> gender = new List<Gender>();
+            gender.Add(new Gender() { Name = _localizer.GetText("GenderMan"), Value = 0 });
+            gender.Add(new Gender() { Name = _localizer.GetText("GenderWoman"), Value = 1 });
+            return gender;
+        }
+        
+        public async Task<List<Employee>> GetAllUsers()
+        {
+            var users = new List<Employee>();
+            var emp_collection = await _context.Employees.Include(x=>x.LinkEmployeRoles).ThenInclude(x=>x.Roles).ToListAsync();
+            foreach (Employee user in emp_collection)
+            {
+                if (user.Gender != null)
+                {
+                    user.GenderName = GetAllGenders().Where(x => x.Value == user.Gender).FirstOrDefault().Name;
+                }
+                if (user.LinkEmployeRoles != null)
+                {
+                    var roles =await GetRolesForEmployee(user);
+                    if (roles.Count() != 0)
+                    {
+                        user.Roles = String.Join(", ", roles.Select(x => x.Name));
+                        user.RolesID = roles.Select(x => (int)x.RolesID).ToArray();
+                    }
+                }
+                var user_projects = await _organizationService.GetProjectsForEmployee(user);
+                if (user_projects.Count() != 0)
+                {
+                    user.ProjectsNames = string.Join(Environment.NewLine, user_projects.Select(x => x.Name));
+                }
+                if (user.BirthDate.HasValue)
+                {
+                    user.BirthDateFormated = user.BirthDate.Value.ToString("dd-MM-yyyy");
+                }
+                users.Add(user);
+            }
+
+            return users.OrderBy(x => x.Name).ThenBy(x => x.Surname).ToList();
         }
     }
 

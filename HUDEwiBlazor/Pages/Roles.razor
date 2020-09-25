@@ -1,0 +1,220 @@
+﻿@page "/roles"
+@layout SiteLayout
+@inject ISyncfusionStringLocalizer  Localizer
+@inject ISecurity  Security
+@inject IMapper _mapper;
+<div class="limiter">
+    <div id="Title">
+        @Localizer.GetText("Roles")
+    </div>
+    <SfToast ID="toast_default" @ref="ToastObj" TimeOut="5000" Icon="e-meeting">
+        <ToastPosition X="Center"></ToastPosition>
+    </SfToast>
+    <SfGrid ID="Grid" @ref="Grid" DataSource="@_roles" AllowPaging="true" AllowTextWrap="true" Toolbar="@(new string[] {"Add","Edit","Delete","Search"})">
+        <GridEvents OnActionComplete="ActionCompleteHandler" TValue="Data.Models.Roles"></GridEvents>
+        <GridPageSettings PageSize="10"></GridPageSettings>
+        <GridEditSettings ShowDeleteConfirmDialog="true" AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog" Dialog="DialogParams">
+            <HeaderTemplate>
+                @{
+                    <span>@Title</span>
+                }
+            </HeaderTemplate>
+            <Template>
+                @{
+                    var Role = (context as Data.Models.Roles);
+                }
+                <div>
+                    <div class="form-row" style="clear:both !important;">
+                        <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfTextBox ID="Name" @bind-Value="@(Role.Name)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Name")"></SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row" style="clear:both !important;">
+                        <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfTextBox ID="Description" @bind-Value="@(Role.Description)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Description")"></SfTextBox>
+                        </div>
+                    </div>
+                    <div class="form-row" style="clear:both !important;">
+                        <div class="control-wrapper col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfMultiSelect @bind-value="@(Role.UsersID)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Users")" @ref="EmployeeSelect" TValue="int[]" ModelType="@models" Mode="@VisualMode.Box" DataSource="@_employee">
+                                <MultiSelectEvents TValue="int[]" Created="Created"></MultiSelectEvents>
+                                <MultiSelectTemplates>
+                                    <ItemTemplate Context="context_2">
+                                        @((context_2 as MappedEmployee).Name) @((context_2 as MappedEmployee).Surname)
+                                    </ItemTemplate>
+                                    <ValueTemplate Context="context_2">
+                                        @((context_2 as MappedEmployee).Name) @((context_2 as MappedEmployee).Surname)
+                                    </ValueTemplate>
+                                    <HeaderTemplate Context="context_2">
+                                        @Localizer.GetText("FirstLastName")
+                                    </HeaderTemplate>
+                                </MultiSelectTemplates>
+                                <MultiSelectFieldSettings Text="EmployeeID" Value="EmployeeID"></MultiSelectFieldSettings>
+
+                            </SfMultiSelect>
+                        </div>
+                    </div>
+                    <div class="form-row" style="clear:both !important;">
+                        <div class="control-wrapper col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                            <SfMultiSelect @bind-value="@(Role.MenusID)" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Sites")" @ref="MenuSelect" TValue="int[]" ModelType="@menu_models" Mode="@VisualMode.Box" DataSource="@_menuitems">
+                                <MultiSelectEvents TValue="int[]"  Created="Created"></MultiSelectEvents>
+                                <MultiSelectTemplates>
+                                    <ItemTemplate Context="context_2">
+                                        @((context_2 as MappedMenuItem).Text)
+                                    </ItemTemplate>
+                                    <ValueTemplate Context="context_2">
+                                        @((context_2 as MappedMenuItem).Text)
+                                    </ValueTemplate>
+                                    <HeaderTemplate Context="context_2">
+                                        @Localizer.GetText("Sites")
+                                    </HeaderTemplate>
+                                </MultiSelectTemplates>
+                                <MultiSelectFieldSettings Text="MenuItemId" Value="MenuItemId"></MultiSelectFieldSettings>
+
+                            </SfMultiSelect>
+                        </div>
+                    </div>
+                </div>
+            </Template>
+        </GridEditSettings>
+        <GridColumns>
+            <GridColumn Field="RolesID" HeaderText="Order ID" Visible="false" TextAlign="TextAlign.Right" HeaderTextAlign="TextAlign.Center" IsPrimaryKey="true"></GridColumn>
+            <GridColumn Field="Name" ValidationRules="@(new ValidationRules{ Required=true, Messages=message})"  HeaderText="@Localizer.GetText("Name")" AutoFit="true" Visible="true" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="Description" HeaderText="@Localizer.GetText("Description")" Visible="true" TextAlign="TextAlign.Left" HeaderTextAlign="TextAlign.Center"></GridColumn>
+            <GridColumn Field="UsersID" Visible="false"></GridColumn>
+            <GridColumn Field="MenusID" Visible="false"></GridColumn>
+            <GridColumn Field="Users" HeaderText="@Localizer.GetText("Users")" Visible="true" TextAlign="TextAlign.Left" HeaderTextAlign="TextAlign.Center"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+</div>
+<Document Title="@Localizer.GetText("Roles")" />
+
+
+        @code{
+            protected SfToast ToastObj;
+            protected SfGrid<Data.Models.Roles> Grid;
+            private SfMultiSelect<int[]> EmployeeSelect;
+            private SfMultiSelect<int[]> MenuSelect;
+
+            private Boolean Check = false;
+            private DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "450px" };
+            private string Title;
+            protected List<Data.Models.Roles> _roles = new List<Data.Models.Roles>();
+            protected List<MappedEmployee> _employee = new List<MappedEmployee>();
+            protected List<MappedMenuItem> _menuitems = new List<MappedMenuItem>();
+            Type models = typeof(MappedEmployee);
+            Type menu_models = typeof(MappedMenuItem);
+
+            IDictionary<string, object> message;
+            private Boolean torefresh = false;
+
+            protected override async Task OnInitializedAsync()
+            {
+                message = new Dictionary<string, object>() { { "required", Localizer.GetText("QueryBuilder_ValidationMessage") }, { "email", Localizer.GetText("EmailValid") } };
+                _roles = await Security.GetRolesAsync();
+                _employee = _mapper.Map<List<MappedEmployee>>(await Security.GetEmployeesAsync());
+                _menuitems = _mapper.Map<List<MappedMenuItem>>(await Security.GetMenuItemsAsync());
+                StateHasChanged();
+            }
+
+            protected async Task ActionCompleteHandler(ActionEventArgs<Data.Models.Roles> args)
+            {
+                if (args.RequestType.ToString() == "Add")
+                {
+                    Title = Localizer.GetText("New_record");
+                }
+                if (args.RequestType.ToString() == "BeginEdit")
+                {
+                    Title = Localizer.GetText("Edit_record") + " " + args.Data.RolesID;
+
+                }
+                if (args.RequestType.ToString() == "Edit")
+                {
+                    int i = 0;
+                }
+
+                if (args.Action == "Add")
+                {
+                    if (args.RequestType.ToString() == "Save")
+                    {
+                        var response = await Security.AddRole(args.Data);
+
+                        if (response.Item1 != "OK")
+                        {
+                            ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                            ToastObj.Show();
+                            torefresh = true;
+                            Grid.Refresh();
+                            StateHasChanged();
+                            return;
+                        }
+                        else
+                        {
+
+                            ToastObj.Title = Localizer.GetText("OperationSuccess");
+                            ToastObj.Show();
+                        }
+                    }
+                }
+
+                if (args.Action == "Edit")
+                {
+                    if (args.RequestType.ToString() == "Save")
+                    {
+                        var response = await Security.UpdateRole(args.Data);
+                        if (response.Item1 != "OK")
+                        {
+                            ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                            ToastObj.Show();
+                            torefresh = true;
+                            Grid.Refresh();
+                            StateHasChanged();
+                            return;
+                        }
+                        else
+                        {
+                            ToastObj.Title = Localizer.GetText("OperationSuccess");
+                            ToastObj.Show();
+                        }
+
+                    }
+                }
+
+                if (args.RequestType.ToString() == "Delete")
+                {
+                    var response = await Security.DeleteRole(args.Data);
+                    if (response.Item1 != "OK")
+                    {
+                        ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+                        ToastObj.Show();
+                        torefresh = true;
+                        Grid.Refresh();
+                        StateHasChanged();
+                        return;
+                    }
+                    else
+                    {
+                        ToastObj.Title = Localizer.GetText("OperationSuccess");
+                        ToastObj.Show();
+                    }
+
+
+                }
+                if (args.RequestType.ToString() == "Refresh" && torefresh == true)
+                {
+                    torefresh = false;
+                    _roles = await Security.GetRolesAsync();
+                }
+                StateHasChanged();
+            }
+
+            public void Created()
+            {
+                if (EmployeeSelect != null) EmployeeSelect.Refresh();
+                if (MenuSelect != null) MenuSelect.Refresh();
+
+            }
+
+
+        }
+

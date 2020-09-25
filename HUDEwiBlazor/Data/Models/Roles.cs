@@ -14,10 +14,14 @@ namespace HUDEwiBlazor.Data.Models
 
         public string Name { get; set; }
         public string Description { get; set; }
-
+        [NotMapped]
+        public int[] UsersID { get; set; }
         [NotMapped]
         public string Users { get; set; }
+        [NotMapped]
+        public int[] MenusID { get; set; }
         public ICollection<LinkEmployeRoles> LinkEmployeRoles { get; set; }
+        public ICollection<LinkRolesMenuItem> LinkRolesMenuItem { get; set; }
 
     }
 }

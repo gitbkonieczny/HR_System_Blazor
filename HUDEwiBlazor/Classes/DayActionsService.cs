@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HUDEwiBlazor.Data;
 using HUDEwiBlazor.Data.Models;
 using HUDEwiBlazor.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace HUDEwiBlazor.Classes
 {

@@ -1,10 +1,6 @@
 ﻿@page "/main"
 @layout MainLayout
 @inject ISyncfusionStringLocalizer  Localizer
-@inject ProtectedSessionStorage ProtectedSessionStorage
-@using HUDEwiBlazor.Data;
-@using Syncfusion.Blazor.Notifications;
-@using HUDEwiBlazor.Components;
 @inject ApplicationDBContext _context
 @inject ProtectedSessionStorage SessionStorage
 @inject NavigationManager NavigationManager
@@ -15,7 +11,7 @@
     private string Name { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
+        var guid = await SessionStorage.GetAsync<string>("GUID");
         if (guid != null)
         {
             var emp = _context.Employees.Where(x => x.GUID == guid).Select(x => new { x.Name, x.Surname }).FirstOrDefault();
@@ -36,7 +32,7 @@
 
 }
 <div class="limiter">
-    <SfToast ID="toast_default" @ref="ToastObj" TimeOut="5000" Icon="e-meeting">
+    <SfToast ID="toast_default" @ref="ToastObj" TimeOut="50000" Icon="e-meeting">
         <ToastPosition X="Center"></ToastPosition>
     </SfToast>
     <div class="container-login100">
@@ -64,7 +60,7 @@
                     <MainButton2 Title="@Localizer.GetText("Vacation_On_Request")" Url="#" type="demand" />
                     <MainButton2 Title="@Localizer.GetText("Vacation_Leave")" Url="#" type="holidays" />
                     <MainButton2 Title="@Localizer.GetText("Work_Schedule")" Url="#" type="schedule" />
-                    <MainButton2 Title="@Localizer.GetText("Advanced")" Url="#" type="advanced" />
+                    <MainButton2 Title="@Localizer.GetText("Advanced")" Url="/profil" type="advanced" />
 
                 </div>
                 <div @onclick="LogOut"><MainButton2 Title="@Localizer.GetText("LogOutEwi")" Url="#" type="logout" /></div>
@@ -110,7 +106,7 @@
                         <div class="offset-0 col-sm-4">
                             <div class="thumbnail_container">
                                 <div class="thumbnail">
-                                    <MainButton Url="#" type="advanced" Title="@Localizer.GetText("Advanced")" src="../images/advanced.jpg" hover_src="../images/advanced-t.jpg" />
+                                    <MainButton Url="/profil" type="advanced" Title="@Localizer.GetText("Advanced")" src="../images/advanced.jpg" hover_src="../images/advanced-t.jpg" />
                                 </div>
                             </div>
                         </div>

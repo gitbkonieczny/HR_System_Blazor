@@ -164,7 +164,7 @@ namespace HUDEwiBlazor.Classes
                 emailClient.Disconnect(true);
             }
         }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 //logger.LogError("Błąd Wysyłania Email: " + emailMessage.ToAddresses.First().Address + ", " +emailMessage.Subject+","+emailMessage.Content);

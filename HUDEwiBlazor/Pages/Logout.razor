@@ -1,0 +1,13 @@
+﻿@page "/logout"
+@layout SiteLayout
+@inject NavigationManager NavigationManager
+
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        @inject ProtectedSessionStorage SessionStorage
+        await SessionStorage.DeleteAsync("GUID");
+        NavigationManager.NavigateTo("/", forceLoad: true);
+    }
+}

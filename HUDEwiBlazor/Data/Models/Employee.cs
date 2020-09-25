@@ -17,6 +17,7 @@ namespace HUDEwiBlazor.Data.Models
             PReset = false;
             PersonalNumber = "";
             ShortCut = "";
+            BirthDate = DateTime.Now;
         }
         public Employee(string Name, string Surname)
         {
@@ -39,11 +40,12 @@ namespace HUDEwiBlazor.Data.Models
         public string ShortCut { get; set; }
 
         [DataType(DataType.Date)]
-        [Required(ErrorMessage = "Valid Date is Required")]
-        public DateTime BirthDate { get; set; }
 
+        public DateTime? BirthDate { get; set; }
+        [NotMapped]
+        public string BirthDateFormated { get; set; }
 
-        public int Gender { get; set; }
+        public int? Gender { get; set; }
         [NotMapped]
         public string GenderName { get; set; }
         [EmailAddress]
@@ -74,7 +76,20 @@ namespace HUDEwiBlazor.Data.Models
         public string Token { get; set; }
 
         public byte[] Avatar { get; set; }
+        [NotMapped]
+        public string Avatar64
+        {
+            get
+            {
+                if (Avatar != null)
+                {
+                    return System.Convert.ToBase64String(Avatar);
+                }
+                else
+                    return null;
 
+            }
+        }
         public string DeviceToken { get; set; }
 
         public bool? ForcePasswordChange { get; set; }
@@ -99,10 +114,13 @@ namespace HUDEwiBlazor.Data.Models
         public ICollection<HolidaysSet> HolidaysSet { get; set; }
 
         [NotMapped]
+        public int? HolidayYear { get; set; }
+        [NotMapped]
         public int? HolidaysMax { get; set; }
         [NotMapped]
         public int? HolidaysOnDemandMax { get; set; }
-
+        [NotMapped]
+        public int[] RolesID { get; set; }
         public int? SessionTime { get; set; }
     }
 }

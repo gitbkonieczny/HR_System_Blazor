@@ -1,0 +1,343 @@
+﻿
+@inject ISyncfusionStringLocalizer  Localizer
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@inject ISecurity iSecurity
+@inject IHolidayApiService iHoliday
+@inject IImageProcessing imageProcessing
+@inject IMapper _mapper
+
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-sm-3 col-lg-3 col-md-3">
+            <SfToast ID="toast_default" @ref="ToastObj" TimeOut="5000" Icon="e-meeting">
+                <ToastPosition X="Center"></ToastPosition>
+            </SfToast>
+            <div class="text-center">
+                <img src="data:image/png;base64, @Employee.Avatar64" class="avatar img-circle img-thumbnail" alt="avatar">
+                <SfUploader ID="UploadFiles" AllowedExtensions=".jpg, .png" AutoUpload="true" Multiple="false">
+                    <UploaderEvents ValueChange="OnChange"></UploaderEvents>
+                </SfUploader>
+            </div>
+            <br>
+            <table border="0" class="table-holiday">
+                <tbody>
+                    <tr>
+                        <th class="table-item">@Localizer.GetText("Holidays")</th>
+                        <th class="table-item"></th>
+                    </tr>
+                    <tr>
+                        <td class="table-item">@Localizer.GetText("HolidaysPerYear")</td>
+                        <td class="table-item"><span class="value">@HolidaysMax</span></td>
+                    </tr>
+                    <tr>
+                        <td class="table-item">@Localizer.GetText("HolidaysPerYearConfirmed")</td>
+                        <td class="table-item"><span class="value">@ConfirmedHolidayForNow</span></td>
+                    </tr>
+                    <tr>
+                        <td class="table-item">@Localizer.GetText("UsedHolidaysToDate")</td>
+                        <td class="table-item"><span class="value">125</span></td>
+                    </tr>
+                    <tr>
+                        <td class="table-item">@Localizer.GetText("HolidaysLeft")</td>
+                        <td class="table-item"><span class="value">125</span></td>
+                    </tr>
+                    <tr>
+                        <td class="table-item">@Localizer.GetText("HolidaysOnDemandLeft")</td>
+                        <td class="table-item"><span class="value">125</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="col-sm-9 col-lg-9 col-md-9">
+            <EditForm class="validate-form" Model=@Employee OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
+                <DataAnnotationsValidator />
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox ID="Name" @bind-Value="@Employee.Name" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("FirstName")"></SfTextBox>
+                        <div class="validation-message">
+                            @Name_validation
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox ID="Surname" @bind-Value="@Employee.Surname" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Surname")"></SfTextBox>
+                        <div class="validation-message">
+                            @Surname_validation
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox ID="ShortCut" Readonly="true" @bind-Value="@Employee.ShortCut" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Shortcut")"></SfTextBox>
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox ID="PersonalNumber" Readonly="true" @bind-Value="@Employee.PersonalNumber" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("PersonalNumber")"></SfTextBox>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfDatePicker ID="BirthDate" TValue="DateTime?" @bind-Value="@Employee.BirthDate" Format="dd-MM-yyyy" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("BirthDate")" Start="CalendarView.Decade"></SfDatePicker>
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfDropDownList ID="Gender" TValue="int?" @bind-Value="@Employee.Gender" TItem="Gender" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Sex")" DataSource="@_genders">
+                            <DropDownListFieldSettings Text="Value" Value="Value"></DropDownListFieldSettings>
+                            <DropDownListTemplates TItem="Gender">
+                                <ItemTemplate Context="context2">
+                                    @((context2 as Gender).Name)
+                                </ItemTemplate>
+                                <ValueTemplate Context="context2">
+                                    <span class="name">@((context2 as Gender).Name)</span>
+                                </ValueTemplate>
+
+                            </DropDownListTemplates>
+                        </SfDropDownList>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox ID="Email" Readonly="true" @bind-Value="@Employee.Email" FloatLabelType="FloatLabelType.Always" Placeholder="E-mail"></SfTextBox>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox Placeholder="@Localizer.GetText("Phone")" ID="MobileNo" @bind-Value="@Employee.MobileNo" FloatLabelType="FloatLabelType.Always"></SfTextBox>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfMultiSelect @ref="RolesSelect" @bind-value="@Employee.RolesID" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Permissions")" TValue="int[]" ModelType="@roles_models" Mode="@VisualMode.Box" DataSource="@_roles" Readonly="true">
+                            <MultiSelectEvents TValue="int[]" Created="Created"></MultiSelectEvents>
+                            <MultiSelectTemplates>
+                                <ItemTemplate Context="context_2">
+                                    @((context_2 as MappedRoles).Name)
+                                </ItemTemplate>
+                                <ValueTemplate Context="context_2">
+                                    @((context_2 as MappedRoles).Name)
+                                </ValueTemplate>
+                                <HeaderTemplate Context="context_2">
+                                    @Localizer.GetText("Permissions")
+                                </HeaderTemplate>
+                            </MultiSelectTemplates>
+                            <MultiSelectFieldSettings Text="RolesID" Value="RolesID"></MultiSelectFieldSettings>
+                        </SfMultiSelect>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                        <SfButton CssClass="right">
+                            @Localizer.GetText("Grid_Save")
+                        </SfButton>
+                    </div>
+                </div>
+
+            </EditForm>
+
+            <EditForm class="validate-form" Model=@passwordChangeModel OnValidSubmit=@ChangePasswordValidFormSubmitted OnInvalidSubmit=@ChangePasswordInvalidFormSubmitted>
+                <DataAnnotationsValidator />
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox Type="InputType.Password" ID="Name" @bind-Value="@passwordChangeModel.password1" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("Password")"></SfTextBox>
+                        <div class="validation-message">
+                            @password_validation_1
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-lg-6 col-md-6">
+                        <SfTextBox Type="InputType.Password" ID="Surname" @bind-Value="@passwordChangeModel.password2" FloatLabelType="FloatLabelType.Always" Placeholder="@Localizer.GetText("PasswordRepeat")"></SfTextBox>
+                        <div class="validation-message">
+                            @password_validation_2
+                        </div>
+                    </div>
+                </div>
+
+                @if (authorization_result != null)
+                {
+                    <div class="validation-message">
+                        @authorization_result
+                    </div>
+                }
+            <div class="form-row">
+                <div class="form-group col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <SfButton CssClass="right">
+                        @Localizer.GetText("Grid_Save")
+                    </SfButton>
+                </div>
+            </div>
+               
+            </EditForm>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private Employee Employee = new Employee();
+    private string validation_message = "";
+    protected List<Gender> _genders;
+    protected SfToast ToastObj;
+    Type roles_models = typeof(MappedRoles);
+    protected List<MappedRoles> _roles;
+    private SfMultiSelect<int[]> RolesSelect;
+
+    private int HolidaysMax = 0;
+    private int ConfirmedHolidayForNow = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _genders = iSecurity.GetAllGenders();
+        _roles = _mapper.Map<List<MappedRoles>>(await iSecurity.GetRolesAsync());
+
+        var guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
+        Employee = await iSecurity.GetEmployee(guid);
+
+
+        var holidayset = await iHoliday.GetHolidaySet((int)Employee.EmployeeID, DateTime.Now);
+        if (holidayset != null) HolidaysMax = (int) holidayset.HolidaysMax;
+        ConfirmedHolidayForNow = await iHoliday.ConfirmedHolidayForNow(Employee, DateTime.Now.Year);
+
+    }
+
+    private async Task OnChange(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+
+            MemoryStream resized_ms = new MemoryStream();
+            resized_ms = await imageProcessing.Resize(file.Stream.ToArray(), 135, 240);
+            Employee.Avatar = await iSecurity.SaveAvatar((int)Employee.EmployeeID, resized_ms.ToArray());
+
+        }
+    }
+
+    public async Task ValidFormSubmitted(EditContext editContext)
+    {
+        Name_validation = null;
+        Surname_validation = null;
+        var response = await iSecurity.UpdateEmployee(Employee);
+        if (response.Item1 != "OK")
+        {
+            ToastObj.Title = Localizer.GetText(response.Item1) + " " + response.Item2;
+            ToastObj.Show();
+            return;
+        }
+        else
+        {
+
+            ToastObj.Title = Localizer.GetText("OperationSuccess");
+            ToastObj.Show();
+        }
+    }
+    public void InvalidFormSubmitted(EditContext editContext)
+    {
+        Employee model = (Employee)editContext.Model;
+        if (model.Name == "" || model.Name == null)
+        {
+            Name_validation = Localizer.GetText("Required");
+        }
+        if (model.Surname == "" || model.Surname == null)
+        {
+            Surname_validation = Localizer.GetText("Required");
+        }
+        if (model.Name.Length<3)
+        {
+            Name_validation = Localizer.GetText("MinThree");
+        }
+        if(model.Surname.Length<3)
+        {
+            Surname_validation = Localizer.GetText("MinThree");
+        }
+    }
+
+    public void Created()
+    {
+        if (RolesSelect != null) RolesSelect.Refresh();
+        // if (MenuSelect != null) MenuSelect.Refresh();
+
+    }
+
+    public string authorization_result = null;
+    public PasswordChangeModel passwordChangeModel = new PasswordChangeModel();
+    public string password_validation_1 { get; set; }
+    public string password_validation_2 { get; set; }
+    public string Name_validation { get; set; }
+    public string Surname_validation { get; set; }
+
+
+    public async Task ChangePasswordValidFormSubmitted(EditContext editContext)
+    {
+        password_validation_1 = null;
+        password_validation_2 = null;
+        PasswordChangeModel model = (PasswordChangeModel)editContext.Model;
+        if (model.password1 == "" || model.password1 == null)
+            password_validation_1 = Localizer.GetText("Required");
+        if (model.password2 == "" || model.password2 == null)
+            password_validation_2 = Localizer.GetText("Required");
+
+        if (password_validation_1 != null || password_validation_2 != null)
+        {
+            return;
+        }
+        if (passwordChangeModel.password1 == passwordChangeModel.password2)
+        {
+            var result = await iSecurity.ChangePasswordforGuid(passwordChangeModel.password1, Employee.GUID);
+            if (result)
+            {
+                authorization_result = null;
+                ToastObj.Title = Localizer.GetText("OperationSuccess");
+                ToastObj.Show();
+            }
+        }
+        else
+        {
+            authorization_result = Localizer.GetText("DiffrentPassword");
+
+        }
+
+    }
+
+    public void ChangePasswordInvalidFormSubmitted(EditContext editContext)
+    {
+        authorization_result = null;
+    }
+}
+
+<style>
+    .container {
+        padding-top: 50px;
+    }
+
+    .e-file-drop {
+        display: none;
+    }
+
+    .e-upload {
+        border: none;
+    }
+
+    .e-upload-files {
+        display: none;
+    }
+
+    .pull-left {
+        text-align: center;
+    }
+
+    .table-holiday {
+        font-size: 12px;
+    }
+
+    .table-item {
+        position: relative;
+        padding: .1rem .5rem;
+        margin-bottom: -1px;
+        background-color: #fff;
+    }
+
+    .value {
+        color: darkblue;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .right {
+        float: right;
+    }
+</style>

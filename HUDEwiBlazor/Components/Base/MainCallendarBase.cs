@@ -223,9 +223,9 @@ namespace HUDEwiBlazor.Components
                             //selected.DayClasses = selected.DayClasses + " e-cell-confirmed";
                             //selected.confirmed = true;
                         }
-                    }
                     simpleScheduleModel.Add(day_schedule);
-                }
+                    }
+            }
             StateHasChanged();
         }
         protected void OnNextMonth()

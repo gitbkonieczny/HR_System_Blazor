@@ -1,0 +1,537 @@
+﻿@inherits LayoutComponentBase
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject NavigationManager NavigationManager
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject ISyncfusionStringLocalizer  Localizer
+@inject ProtectedSessionStorage SessionStorage
+@inject ISecurity iSecurity
+@using HUDEwiBlazor.Data;
+@using HUDEwiBlazor.Data.Models;
+@using HUDEwiBlazor.Interfaces;
+@inject ApplicationDBContext _context
+@using Microsoft.Extensions.Options;
+@using Microsoft.AspNetCore.Builder;
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.EntityFrameworkCore;
+
+
+@if (isConnected)
+{
+
+    <div id="wrapper">
+        <div class="col-lg-12 col-sm-12 col-md-12">
+            <div class="header-section dock-menu" id="header">
+                <ul class="header-list">
+                    <li id="hamburger" class="icon-menu icon list" @onclick="@Toggle"></li>
+                    <li class="right-header list">
+                        <div class="horizontal-menu">
+                            <SfMenu  CssClass="dock-menu" Items="@AccountMenuItems" Orientation="@Orientation"></SfMenu>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar element declaration -->
+            <SfSidebar ID="MainMenu" HtmlAttributes="@HtmlAttribute" Target=".main-content" Width="220px" DockSize="50px" EnableDock="true" @ref="Sidebar">
+                <ChildContent>
+                    <div class="main-menu">
+                        <div>
+                            <LocalizatinSwitcher />
+                            <SfMenu @ref="SfMenu" CssClass="dock-menu" Items="@MainMenuItems" Orientation="@VerOrientation">
+                            </SfMenu>
+                        </div>
+                    </div>
+                </ChildContent>
+            </SfSidebar>
+            <!-- end of sidebar element -->
+            <!-- main content declaration -->
+            <div class="main-content" id="maintext">
+                <div class="content">
+                    <div class="bground" style="background-repeat:no-repeat; background-image: url('../images/hud_slide.jpg');">@Body</div>
+                </div>
+            </div>
+            <!--end of main content declaration -->
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+
+
+
+@code{
+    private bool isConnected = false;
+    public string guid { get; set; }
+    SfSidebar Sidebar;
+    public Orientation Orientation = Orientation.Horizontal;
+    public Orientation VerOrientation = Orientation.Vertical;
+    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+{
+        {"class", "sidebar-menu" }
+    };
+    public List<Syncfusion.Blazor.Navigations.MenuItem> AccountMenuItems = new List<Syncfusion.Blazor.Navigations.MenuItem>();
+    public List<Syncfusion.Blazor.Navigations.MenuItem> MainMenuItems = new List<Syncfusion.Blazor.Navigations.MenuItem>();
+
+    public string mode = "Dark Mode";
+    public SfMenu SfMenu;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMenu();
+
+    }
+
+    public async Task Created()
+    {
+    }
+    public async Task LoadMenu()
+    {
+        AccountMenuItems.Add(
+        new Syncfusion.Blazor.Navigations.MenuItem()
+        {
+            Text = Localizer.GetText("Account"),
+            Items = new List<Syncfusion.Blazor.Navigations.MenuItem>() {
+                            new Syncfusion.Blazor.Navigations.MenuItem { Text = Localizer.GetText("Profil") , Url = "/profil" },
+                            new Syncfusion.Blazor.Navigations.MenuItem { Text = Localizer.GetText("Home"), Url="/main" },
+                            new Syncfusion.Blazor.Navigations.MenuItem { Text = Localizer.GetText("InfoBoard"), Url="/info" },
+                            new Syncfusion.Blazor.Navigations.MenuItem { Text = Localizer.GetText("LogOutEwi"), Url="/logout" }
+                               }
+        }
+       );
+        guid = await ProtectedSessionStorage.GetAsync<string>("GUID");
+        var employee = await iSecurity.GetEmployee(guid);
+        var roles = await iSecurity.GetRolesForEmployee(employee);
+        var menu_ids = new List<int?>();
+        foreach (var role in roles)
+        {
+            var ids = role.LinkRolesMenuItem.Select(x => x.MenuItemID);
+            menu_ids.AddRange(ids);
+        }
+        menu_ids = menu_ids.Distinct().ToList();
+        var MenuFromDB = new List<Data.Models.MenuItem>();
+        foreach (var menu in menu_ids)
+        {
+            var menu_record =  _context.MenuItem.Include(x => x.Items).Where(x => x.MenuItemId == menu && x.ParentID == null && x.Invisible == false).FirstOrDefault();
+            if (menu_record != null)
+            {
+                var items = new List<Data.Models.MenuItem>();
+                foreach (var item in menu_record.Items)
+                {
+                    if (menu_ids.Contains(item.MenuItemId))
+                    {
+                        items.Add(item);
+                    }
+                }
+                menu_record.Items = items;
+                MenuFromDB.Add(menu_record);
+            }
+        }
+        //var MenuFromDB = _context.MenuItem.Include(x => x.Items).Where(x => x.ParentID == null).ToList();
+        foreach (var menu in MenuFromDB)
+        {
+            var new_menu = new Syncfusion.Blazor.Navigations.MenuItem();
+            //new_menu.ID = menu.MenuItemId.ToString();
+            new_menu.IconCss = menu.IconCss + " icon";
+            new_menu.Text = Localizer.GetText(menu.Text);
+            new_menu.Url = menu.Url;
+            if (menu.Items.Count == 0)
+            {
+                menu.Items = null;
+            }
+            if (menu.Items != null)
+            {
+                new_menu.Items = new List<Syncfusion.Blazor.Navigations.MenuItem>();
+
+                foreach (var child in menu.Items)
+                {
+                    var child_item = new Syncfusion.Blazor.Navigations.MenuItem();
+                    child_item.ID = child.MenuItemId.ToString();
+                    child_item.IconCss = child.IconCss + " icon";
+                    child_item.Text = Localizer.GetText(child.Text);
+                    child_item.Url = child.Url;
+                    new_menu.Items.Add(child_item);
+                }
+            }
+            MainMenuItems.Add(new_menu);
+        }
+        StateHasChanged();
+        
+    }
+
+    public void Toggle()
+    {
+        this.Sidebar.Toggle();
+    }
+    public void ToggleDarkMode()
+    {
+        if (mode == "Night Mode")
+        {
+            mode = "Day Mode";
+        }else
+        {
+            mode = "Night Mode";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isConnected = true;
+            await LoadStateAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadStateAsync()
+    {
+        guid = await ProtectedSessionStorage.GetAsync<string>
+            ("GUID");
+        if (guid == null)
+        {
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
+
+    }
+
+}
+<style>
+    .dark-mode {
+        background-color: black;
+        color: white;
+    }
+
+    #Grid{
+        
+    }
+    #Title {
+        width: 100%;
+        align-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: x-large;
+        padding-top: 9px;
+        border-bottom: 1px;
+        border-bottom-color: #002F89;
+        border-bottom-style: dashed;
+        padding-bottom: 10px;
+    }
+    .bground {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        z-index: 2;
+        top: -20px;
+        overflow: scroll;
+    }
+
+        .bground::before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: -2;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255,255,255,0.9);
+        }
+
+    .sidebar-menu.e-dock.e-close .e-menu-item .e-menu-icon {
+        padding-right: 30px !important;
+    }
+
+    .e-menu-wrapper ul .e-menu-item .e-menu-url {
+        color: azure !important;
+    }
+
+    .e-menu-wrapper ul .e-menu-item {
+        color: azure !important;
+    }
+
+    #MainMenu {
+        height: 100% !important;
+    }
+
+    #wrapper {
+        width: 100%;
+        height: 100%;
+    }
+    /* header-section styles */
+    #header.header-section,
+    #header .search-icon {
+        height: 49px;
+    }
+
+    #header #hamburger.icon-menu {
+        font-size: 24px;
+        float: left;
+        line-height: 50px;
+    }
+
+    #header .right-header {
+        height: 35px;
+        padding: 7px;
+        float: right;
+    }
+
+    #header .list {
+        list-style: none;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 35px;
+    }
+
+    #header .header-list {
+        padding-left: 15px;
+        margin: 0;
+    }
+
+    @@media(max-width:500px) {
+        #header .right-header.list.support,
+        #header .right-header.list.tour {
+            display: none;
+        }
+    }
+    /* text input styles */
+    #header .search-icon {
+        float: left;
+        padding-left: 15px;
+        border: 0px solid #33383e !important;
+        background-color: #33383e;
+        cursor: text;
+        width: 10em;
+    }
+
+        #header .search-icon:focus {
+            outline: none;
+            cursor: default;
+        }
+    /* end of text input styles */
+    /* end of header-section styles */
+    /* content area styles */
+    #maintext.main-content {
+        height: 100vh;
+        z-index: 1000;
+    }
+
+    #maintext .content {
+        height: 100%;
+    }
+    /* end of content area styles */
+    /* menu styles */
+    /* horizontal-menu styles */
+    #header .header-list .horizontal-menu .e-menu-item {
+        height: 35px;
+        vertical-align: middle;
+        font-size: 16px;
+        line-height: 35px;
+    }
+
+    #header .e-menu-item .e-caret {
+        line-height: 35px;
+    }
+    /* end of horizontal-menu styles */
+    /* vertical-menu styles */
+    .sidebar-menu .e-menu-wrapper ul .e-menu-item.e-menu-caret-icon {
+        width: 220px;
+    }
+
+    .sidebar-menu .e-menu-wrapper ul .e-menu-item:hover, .e-menu-wrapper ul .e-menu-item.e-focused:hover {
+        background-color: #3e454c !important;
+    }
+
+    .e-menu-wrapper ul .e-menu-item.e-selected {
+        background-color: #3e454c !important;
+    }
+    /* end of vertical-menu styles */
+    /* end of menu styles */
+    /* Sidebar styles */
+    /* docksidebar styles */
+    .e-menu-wrapper ul .e-menu-item .e-caret,
+    #header .search-icon,
+    .sidebar-menu .action-btn,
+    #header .e-menu-item .e-caret,
+    .e-menu-wrapper ul .e-menu-item {
+        color: #fff !important;
+    }
+
+    .e-close .e-menu-wrapper ul .e-menu-item {
+        width: 50px;
+    }
+
+    .e-close ul .e-menu-item.e-menu-caret-icon {
+        padding-right: 12px;
+    }
+
+    .sidebar-menu.e-dock.e-close .e-menu-wrapper ul .e-menu-item .e-caret,
+    .sidebar-menu.e-dock.e-close .main-menu-header,
+    .sidebar-menu.e-dock.e-close .action-btn {
+        display: none;
+    }
+
+    .sidebar-menu.e-dock.e-close .e-menu-wrapper ul .e-menu-item.e-menu-caret-icon,
+    .sidebar-menu.e-dock.e-close .e-menu-wrapper ul.e-vertical {
+        min-width: 0;
+        width: 50px !important;
+    }
+
+    .sidebar-menu.e-dock.e-close .e-menu-wrapper ul.e-menu {
+        font-size: 0;
+    }
+
+    .sidebar-menu.e-dock.e-close .e-menu-item .e-menu-icon {
+        font-size: 20px;
+        padding: 0;
+    }
+
+    .e-menu-wrapper ul .e-menu-item.e-focused {
+        background-color: #33383e !important;
+    }
+
+    .sidebar-menu, #header ul, .e-menu-wrapper, .e-menu-wrapper ul {
+        background-color: #002F89 !important;
+        color: #fff !important;
+        overflow: hidden;
+    }
+        /* end of docksidebar styles */
+        /*end of  Sidebar styles */
+        /*main-menu-header  styles */
+        .sidebar-menu .main-menu-header {
+            padding: 4px 0 0 18px;
+            color: #656a70;
+        }
+        /*end of main-menu-header  styles */
+        /*button styles */
+        .sidebar-menu .action-btn {
+            margin-left: 16px;
+            width: 165px;
+            height: 30px;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .sidebar-menu .action-btn {
+            background-color: #1784c7;
+        }
+    /*end of button styles */
+    /* custom code start */
+    .center {
+        text-align: center;
+        display: none;
+        font-size: 13px;
+        font-weight: 400;
+        margin-top: 20px;
+    }
+
+    .sb-content-tab .center {
+        display: block;
+    }
+
+    #sb-content-header {
+        display: none
+    }
+
+    .sb-content-section {
+        border: 0;
+    }
+
+    .col-md-12, body {
+        padding: 0;
+    }
+
+    .sidebar-menu {
+        margin-left: -1px;
+    }
+    /*body styles */
+    body {
+        margin: 0;
+        overflow-y: hidden;
+        -webkit-tap-highlight-color: transparent;
+    }
+    /*end of body styles */
+    /* custom code end */
+    /*icon styles */
+
+
+    .sidebar-menu .icon,
+    #header #hamburger.icon-menu {
+    }
+
+    .sidebar-menu .e-menu-icon::before {
+        color: #656a70;
+    }
+    /*icon styles */
+    /* custom code start */
+    .sf-new .sb-header,
+    .sf-new .sb-bread-crumb,
+    .sf-new #action-description,
+    .sf-new .sb-action-description,
+    .sf-new .e-tab-header,
+    .sf-new .description-section,
+    .sf-new #description-section,
+    .sf-new #description,
+    .sf-new #navigation-btn,
+    .sf-new .sb-toolbar-splitter,
+    .sf-new .sb-footer, .sf-new #left-sidebar, .sb-component-name {
+        display: none
+    }
+
+    .sf-new .sb-right-pane.e-view {
+        margin-left: 0px !important;
+    }
+
+    .sb-action-description.sb-rightpane-padding {
+        padding-bottom: 0;
+    }
+
+    .description-section {
+        padding-top: 0;
+    }
+
+    #content-tab.sb-content-tab {
+        height: 100% !important;
+    }
+
+    .sf-new .container-fluid,
+    .sf-new .container-fluid .control-section,
+    #sidebar-section, description-section sb-rightpane-padding {
+        padding: 0;
+    }
+
+    .sb-component-name.sb-rightpane-padding {
+        margin-top: -56px;
+    }
+
+    .sb-right-pane.e-view {
+        left: 0;
+        padding-left: 0;
+        padding-right: 0;
+        top: 0;
+        overflow-y: hidden;
+    }
+
+    .sb-desktop-wrapper {
+        height: 100%;
+    }
+
+    .sb-component-name h1 {
+        padding-top: 0;
+    }
+
+    .sf-new .sb-content.e-view {
+        top: 0;
+    }
+
+    .e-anchor-wrap {
+        font-size: 12px;
+    }
+</style>

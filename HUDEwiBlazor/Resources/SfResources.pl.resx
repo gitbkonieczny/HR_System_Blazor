@@ -5073,4 +5073,211 @@
   <data name="MailSubjectPasswordCreate" xml:space="preserve">
     <value>Wysłano prośbę o utworzenie nowego hasła.</value>
   </data>
+  <data name="AbsenceChange" xml:space="preserve">
+    <value>Zmiana obecności</value>
+  </data>
+  <data name="AbsenceList" xml:space="preserve">
+    <value>Lista Nieobecności</value>
+  </data>
+  <data name="Absences" xml:space="preserve">
+    <value>Urlopy / nieobecności</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="Children" xml:space="preserve">
+    <value>Dzieci pracowników</value>
+  </data>
+  <data name="Clients" xml:space="preserve">
+    <value>Klienci</value>
+  </data>
+  <data name="Departments" xml:space="preserve">
+    <value>Oddziały</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Dokumenty</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Pracownicy</value>
+  </data>
+  <data name="Forms" xml:space="preserve">
+    <value>Formularze</value>
+  </data>
+  <data name="HolidayAccept" xml:space="preserve">
+    <value>Akceptacja urlopów</value>
+  </data>
+  <data name="HolidayReport" xml:space="preserve">
+    <value>Raport Urlopów</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Strona Domowa</value>
+  </data>
+  <data name="InfoBoard" xml:space="preserve">
+    <value>Tablica informacyjna</value>
+  </data>
+  <data name="MonthReport" xml:space="preserve">
+    <value>Raport Miesięczny</value>
+  </data>
+  <data name="OrgStructure" xml:space="preserve">
+    <value>Struktura organizacyjna</value>
+  </data>
+  <data name="OverTimeCategories" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="OverTimeList" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <data name="OverTimes" xml:space="preserve">
+    <value>Nadgodziny</value>
+  </data>
+  <data name="OverTimesAdmin" xml:space="preserve">
+    <value>Nadgodziny pracowników</value>
+  </data>
+  <data name="Overview1" xml:space="preserve">
+    <value>Zestawienie 1</value>
+  </data>
+  <data name="Overview2" xml:space="preserve">
+    <value>Zestawienie 2</value>
+  </data>
+  <data name="Presence" xml:space="preserve">
+    <value>Zarządzanie Obecnością</value>
+  </data>
+  <data name="Profil" xml:space="preserve">
+    <value>Profil Użytkownika</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Projekty</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Raporty</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Grafik Pracowników</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia systemu</value>
+  </data>
+  <data name="Shifts" xml:space="preserve">
+    <value>Zmiany</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Zespoły</value>
+  </data>
+  <data name="WorkCard" xml:space="preserve">
+    <value>Karta pracy</value>
+  </data>
+  <data name="WorkCardAdmin" xml:space="preserve">
+    <value>Karty prac pracowników</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Użytkownicy</value>
+  </data>
+  <data name="Edit_record" xml:space="preserve">
+    <value>Edycja rekordu</value>
+  </data>
+  <data name="New_record" xml:space="preserve">
+    <value>Nowy rekord</value>
+  </data>
+  <data name="FirstLastName" xml:space="preserve">
+    <value>Imię i Nazwisko</value>
+  </data>
+  <data name="Sites" xml:space="preserve">
+    <value>Witryny</value>
+  </data>
+  <data name="DBError" xml:space="preserve">
+    <value>Błąd bazy danych</value>
+  </data>
+  <data name="OperationSuccess" xml:space="preserve">
+    <value>Operacja zakończona sukcesem</value>
+  </data>
+  <data name="ActiveQ" xml:space="preserve">
+    <value>Czy aktywny?</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Data urodzenia</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Imię</value>
+  </data>
+  <data name="GenderMan" xml:space="preserve">
+    <value>Mężczyzna</value>
+  </data>
+  <data name="GenderWoman" xml:space="preserve">
+    <value>Kobieta</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Uprawnienia</value>
+  </data>
+  <data name="PersonalNumber" xml:space="preserve">
+    <value>Numer osobisty</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Płeć</value>
+  </data>
+  <data name="Shortcut" xml:space="preserve">
+    <value>Skrót</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Państwo</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Nazwisko</value>
+  </data>
+  <data name="EmailAlreadyExist" xml:space="preserve">
+    <value>Podany adres e-mail już istnieje</value>
+  </data>
+  <data name="FreeHoliday" xml:space="preserve">
+    <value>Ilość dni urlopowych:</value>
+  </data>
+  <data name="FreeHolidayOnDemand" xml:space="preserve">
+    <value>Ilość dni urlopowych na żądanie:</value>
+  </data>
+  <data name="HolidayYear" xml:space="preserve">
+    <value>Dni urlopowe w roku:</value>
+  </data>
+  <data name="AccountCreateSubject" xml:space="preserve">
+    <value>Nowe konto w systemie HUD Ewi</value>
+  </data>
+  <data name="AcountCreateContent" xml:space="preserve">
+    <value>Gratulacje&lt;br&gt;Adres: &lt;a href="{0}"&gt;{0}&lt;/a&gt;&lt;br&gt;Twoja nazwa użytkownika: {1}&lt;br&gt;Twoje hasło: {2}</value>
+  </data>
+  <data name="EmailValid" xml:space="preserve">
+    <value>Proszę wpisać prawidłowy adres e-mail</value>
+  </data>
+  <data name="Holidays" xml:space="preserve">
+    <value>Urlopy:</value>
+  </data>
+  <data name="HolidaysLeft" xml:space="preserve">
+    <value>Pozostało dni urlopowych:</value>
+  </data>
+  <data name="HolidaysOnDemandLeft" xml:space="preserve">
+    <value>Pozostało na żądanie w bieżącym roku:</value>
+  </data>
+  <data name="HolidaysPerYear" xml:space="preserve">
+    <value>Ilość dni urlopowych na rok:</value>
+  </data>
+  <data name="HolidaysPerYearConfirmed" xml:space="preserve">
+    <value>Potwierdzony urlop w bieżącym roku:</value>
+  </data>
+  <data name="MinThree" xml:space="preserve">
+    <value>Minimum 3 znaki.</value>
+  </data>
+  <data name="UsedHolidaysToDate" xml:space="preserve">
+    <value>Wykorzystany urlop w bieżącym roku do dnia dzisiejszego:</value>
+  </data>
 </root>
